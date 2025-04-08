@@ -1,0 +1,56 @@
+@import 'tailwindcss';
+
+@plugin "daisyui";
+
+@plugin "daisyui/theme" {
+  name: "light";
+  default: true;
+  --color-primary: #05336e;
+  --color-primary-content: #ffffff;
+  --color-secondary: #BB8D54;
+  --color-secondary-content: #ffffff;
+  --color-neutral: #D5DCE8;
+  --color-neutral-content: #000000;
+  --color-neutral-50: #9DADC9;  /*то что поверх (кнопки в редактировании и тд)*/
+  --color-neutral-50-content: #000000;
+  --color-base-100: #F6F6F6;
+  --color-base-content: #000000;
+
+
+}
+
+@plugin "daisyui/theme" {
+  name: "dark";
+  --color-primary: #001741;
+  --color-primary-content: #C3C3C3;
+  --color-base-100: #1F1F1F;
+  --color-base-content: #C3C3C3;
+  --color-secondary: #BB8D54;
+  --color-secondary-content: #C3C3C3;
+  --color-neutral: #404752;
+  --color-neutral-content: #C3C3C3;
+  --color-neutral-50: #5F6A7A; /*то что поверх (кнопки в редактировании и тд)*/
+  --color-neutral-50-content: #C3C3C3;
+}
+
+html {
+  transition: background-color 0.3s ease;
+}
+
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+}
