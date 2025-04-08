@@ -39,7 +39,7 @@
           <div class="flex items-center justify-between mb-2">
             <h3 class="text-xl font-semibold">Система</h3>
             <NuxtLink to="/information_system">
-              <button class="btn w-auto min-w-50 px-5 truncate bg-neutral-50 text-neutral-50-content">SystemName</button>
+              <button class="btn w-auto min-w-80 px-5 truncate bg-neutral-50 text-neutral-50-content">SystemName</button>
             </NuxtLink>
           </div>
         </div>
@@ -48,18 +48,16 @@
         <div class="mb-2">
           <div class="flex items-center justify-between mb-2">
             <h3 class="text-xl font-semibold">Кластер</h3>
-            <button class="btn w-auto min-w-50 px-5 truncate bg-base-100 text-neutral-50-content"
-                    popovertarget="popover-1"
-                    style="anchor-name:--anchor-1">
+            <select class="select select-neutral">
+              <option disabled selected>
               {{ selectedCluster }}
-            </button>
-            <ul class="dropdown menu min-w-50 truncate rounded-box bg-base-100 text-neutral-50-content shadow-sm"
-                popover id="popover-1"
-                style="position-anchor:--anchor-1">
-              <li v-for="cluster in clusters" :key="cluster">
-                <a @click="selectedCluster = cluster">{{ cluster }}</a>
-              </li>
-            </ul>
+              </option>
+              <div class="min-w-50 truncate rounded-box bg-base-100 text-neutral-50-content shadow-sm">
+                <option v-for="cluster in clusters" :key="cluster">
+                  <a @click="selectedCluster = cluster">{{ cluster }}</a>
+                </option>
+              </div>
+            </select>
           </div>
         </div>
 
@@ -67,7 +65,9 @@
         <div class="mb-6">
           <div class="flex items-center justify-between mb-2">
             <h3 class="text-xl font-semibold">IP-адреса</h3>
-            <button class="btn btn-square bg-neutral-50 font-semibold text-2xl text-neutral-50-content "><span class="mb-1">+</span></button>
+            <NuxtLink to="/redaction">
+              <button class="btn btn-square bg-neutral-50 font-semibold text-2xl text-neutral-50-content "><span class="mb-1">+</span></button>
+            </NuxtLink>
           </div>
           <div class="overflow-x-auto bg-base-100 text-base-content">
             <table class="table">

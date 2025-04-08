@@ -35,26 +35,24 @@
         <div class="mb-2">
           <div class="flex items-center justify-between mb-2">
             <h3 class="text-xl font-semibold">Название</h3>
-            <span class="w-auto min-w-50 px-5 py-2 truncate bg-base-100 text-base-content flex items-center justify-center rounded-sm font-semibold">SystemName</span>
+            <span class="w-auto min-w-80 px-5 py-2 truncate bg-base-100 text-base-content flex items-center justify-center rounded-sm font-semibold">SystemName</span>
           </div>
         </div>
 
         <!-- Тип -->
         <div class="mb-2">
           <div class="flex items-center justify-between mb-2">
-            <h3 class="text-xl font-semibold">Кластер</h3>
-            <button class="btn w-auto min-w-50 px-5 truncate bg-base-100 text-neutral-50-content"
-                    popovertarget="popover-1"
-                    style="anchor-name:--anchor-1">
+            <h3 class="text-xl font-semibold">Тип</h3>
+            <select class="select select-neutral">
+              <option disabled selected>
               {{ selectedType }}
-            </button>
-            <ul class="dropdown menu min-w-50 truncate rounded-box bg-base-100 text-neutral-50-content shadow-sm"
-                popover id="popover-1"
-                style="position-anchor:--anchor-1">
-              <li v-for="Type in types" :key="Type">
-                <a @click="selectedType = Type">{{ Type }}</a>
-              </li>
-            </ul>
+              </option>
+              <div class="min-w-50 truncate rounded-box bg-base-100 text-neutral-50-content shadow-sm">
+                <option v-for="Type in types" :key="Type">
+                  <a @click="selectedType = Type">{{ Type }}</a>
+                </option>
+              </div>
+            </select>
           </div>
         </div>
 
