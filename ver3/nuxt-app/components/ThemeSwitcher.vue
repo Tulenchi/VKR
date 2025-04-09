@@ -1,5 +1,5 @@
 <template>
-  <label class="swap swap-rotate">
+  <label class="btn btn-ghost btn-secondary h-12 w-12 swap swap-rotate">
     <!-- this hidden checkbox controls the state -->
     <input type="checkbox" class="theme-controller" @change="toggleTheme" :checked="isDark" />
 

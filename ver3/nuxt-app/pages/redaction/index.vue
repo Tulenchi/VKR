@@ -34,8 +34,8 @@
       </div>
     </div>
 
-  <div class="min-h-screen px-12 py-4">
-    <div class="card bg-neutral text-neutral-content shadow-xl mb-3">
+  <main class="container mx-auto px-4 py-8 max-w-3xl">
+    <div class="card bg-neutral text-neutral-content shadow-xl">
       <div class="card-body">
 
         <!-- Название системы -->
@@ -49,7 +49,7 @@
         <div class="mb-2">
           <div class="flex items-center justify-between mb-2">
             <h3 class="text-xl font-semibold">IP</h3>
-              <input type="text" placeholder="Type here" class="input input-base-100" />
+              <input type="text" placeholder="Type here" class="input input-neutral input-base-100" />
           </div>
         </div>
 
@@ -57,32 +57,43 @@
         <div class="mb-2">
           <div class="flex items-center justify-between mb-2">
             <h3 class="text-xl font-semibold">Version</h3>
-            <input type="text" placeholder="Type here" class="input input-base-100" />
+            <input type="text" placeholder="Type here" class="input input-neutral input-base-100" />
           </div>
         </div>
 
         <!-- Тип -->
         <div class="mb-2">
-          <div class="flex items-center justify-between mb-2">
+          <div class="flex items-center justify-between mb-3">
             <h3 class="text-xl font-semibold">Type</h3>
-            <input type="text" placeholder="Type here" class="input input-base-100" />
+            <input type="text" placeholder="Type here" class="input input-neutral input-base-100" />
           </div>
         </div>
 
         <!-- Комментарий -->
         <div class="mb-2">
-          <div class="flex items-center justify-between mb-2">
+          <div class="flex justify-between mb-2">
             <h3 class="text-xl font-semibold">Description</h3>
-            <input type="text" placeholder="Type here" class="input input-base-100" />
+            <textarea type="text" placeholder="Type here" class="textarea textarea-neutral resize-none overflow-hidden" rows="5" @input="autoResizeTextarea" ref="textarea"></textarea>
           </div>
         </div>
       </div>
     </div>
-  </div>
+  </main>
 
 </template>
 
 <script lang="ts" setup>
+
+import { ref } from 'vue';
+
+const textarea = ref(null);
+
+const autoResizeTextarea = () => {
+  if (textarea.value) {
+    textarea.value.style.height = 'auto'; // Сначала сбрасываем высоту
+    textarea.value.style.height = `${textarea.value.scrollHeight}px`; // Устанавливаем новую высоту
+  }
+};
 
 const router = useRouter()
 

@@ -19,7 +19,7 @@
     </div>
   </div>
   <div class="min-h-screen p-4">
-    <div class="h-full w-full bg-neutral rounded-box shadow-lg">
+    <div class="h-full w-full bg-neutral rounded-box shadow-md">
       <h1 class="text-center"> MAP </h1>
     </div>
   </div>

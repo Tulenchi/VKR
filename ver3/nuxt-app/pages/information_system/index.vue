@@ -1,5 +1,5 @@
 <template>
-  <div class="navbar bg-primary shadow-sm">
+  <div class="navbar bg-primary shadow-sm sticky top-0 z-40">
     <div class="navbar-start">
         <button class="btn btn-ghost btn-secondary h-12 w-12 mr-1" @click="goBack">
           <span class="text-primary-content">
@@ -43,15 +43,11 @@
         <div class="mb-2">
           <div class="flex items-center justify-between mb-2">
             <h3 class="text-xl font-semibold">Тип</h3>
-            <select class="select select-neutral">
-              <option disabled selected>
-              {{ selectedType }}
+            <select class="select select-neutral" v-model="selectedType">
+              <option disabled selected>Выберите тип</option>
+              <option v-for="Type in types" :key="Type" :value="Type">
+                {{ Type }}
               </option>
-              <div class="min-w-50 truncate rounded-box bg-base-100 text-neutral-50-content shadow-sm">
-                <option v-for="Type in types" :key="Type">
-                  <a @click="selectedType = Type">{{ Type }}</a>
-                </option>
-              </div>
             </select>
           </div>
         </div>

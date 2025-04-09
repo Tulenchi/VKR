@@ -2,7 +2,7 @@
   <div class="navbar bg-primary shadow-sm">
     <div class="navbar-start">
       <NuxtLink to="/map_servers">
-        <button class="btn btn-ghost btn-secondary h-12 w-12">
+        <button class="btn btn-ghost btn-secondary h-12 w-12 ">
           <span class="text-primary-content">
             <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon>

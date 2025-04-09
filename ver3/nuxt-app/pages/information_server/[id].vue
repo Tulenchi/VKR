@@ -1,5 +1,5 @@
 <template>
-  <div class="navbar bg-primary shadow-sm">
+  <div class="navbar bg-primary shadow-sm sticky top-0 z-40">
     <div class="navbar-start">
       <NuxtLink to="/">
         <button class="btn btn-ghost btn-secondary h-12 w-12 mr-1">
@@ -39,7 +39,7 @@
           <div class="flex items-center justify-between mb-2">
             <h3 class="text-xl font-semibold">Система</h3>
             <NuxtLink to="/information_system">
-              <button class="btn w-auto min-w-80 px-5 truncate bg-neutral-50 text-neutral-50-content">SystemName</button>
+              <button class="btn px-5 truncate bg-neutral-50 text-neutral-50-content sm:min-w-60 md:min-w-80">SystemName</button>
             </NuxtLink>
           </div>
         </div>
@@ -48,15 +48,11 @@
         <div class="mb-2">
           <div class="flex items-center justify-between mb-2">
             <h3 class="text-xl font-semibold">Кластер</h3>
-            <select class="select select-neutral">
-              <option disabled selected>
-              {{ selectedCluster }}
+            <select class="select select-neutral" v-model="selectedCluster">
+              <option disabled selected>Выберите кластер</option>
+              <option v-for="cluster in clusters" :key="cluster" :value="cluster">
+                {{ cluster }}
               </option>
-              <div class="min-w-50 truncate rounded-box bg-base-100 text-neutral-50-content shadow-sm">
-                <option v-for="cluster in clusters" :key="cluster">
-                  <a @click="selectedCluster = cluster">{{ cluster }}</a>
-                </option>
-              </div>
             </select>
           </div>
         </div>
