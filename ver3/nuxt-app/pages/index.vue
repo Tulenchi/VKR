@@ -21,49 +21,43 @@
     </div>
   </div>
 
+  <!--<div class="flex justify-center px-4 py-7 ">
+      <label class="input input-neutral w-full max-w-xl">
+        <svg class="h-4 w-4 opacity-70" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <g stroke-linejoin="round" stroke-linecap="round" stroke-width="2.5" fill="none" stroke="currentColor">
+            <circle cx="11" cy="11" r="8"></circle>
+            <path d="m21 21-4.3-4.3"></path>
+          </g>
+        </svg>
+        <input type="search" class="grow" placeholder="Поиск серверов..." />
+      </label>
+  </div>
+  -->
+
     <main class="container mx-auto px-4 py-8 max-w-3xl">
       <div class="space-y-4">
         <ServerCardMain
-            title="Личный кабинет"
-            ip="10.136.2.40"
-            domain="lk.etu.ru"
-            serverId = "1"
-        />
-        <ServerCardMain
-            title="Посещаемость"
-            ip="10.136.2.40"
-            domain="digital.etu.ru"
-            serverId = "2"
-        />
-        <ServerCardMain
-            title="Медиатека"
-            ip="10.136.2.40"
-            domain="media.etu.ru"
-            serverId = "3"
-        />
-        <ServerCardMain
-            title="Библиотека"
-            ip="10.136.2.40"
-            domain="library.etu.ru"
-            serverId = "4"
-        />
-        <ServerCardMain
-            title="Moodle"
-            ip="10.136.2.40"
-            domain="vec.etu.ru"
-            serverId = "5"
-        />
-        <ServerCardMain
-            title="Лэти"
-            ip="10.136.2.40"
-            domain="etu.ru"
-            serverId = "6"
+            v-for="server in store.servers"
+            :key="server.id"
+            :title="server.name"
+            :ip="server.ip_addresses"
+            :domain="server.domain_name.name"
+            :server-id="server.id"
         />
       </div>
     </main>
 </template>
 
-<script>
+<script setup lang="ts">
+import { onMounted } from 'vue';
+import { useServerStore } from '@/stores/ServerStore';
+
+const store = useServerStore();
+
+onMounted(() => {
+  store.fetchServers();
+});
+
   useSeoMeta({
   title: 'Сервера ОИС',
   ogTitle: 'Сервера ОИС',

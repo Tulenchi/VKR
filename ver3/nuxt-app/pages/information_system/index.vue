@@ -1,5 +1,5 @@
 <template>
-  <div class="navbar bg-primary shadow-sm sticky top-0 z-40">
+  <div class="navbar bg-primary shadow-xl sticky top-0 z-40">
     <div class="navbar-start">
         <button class="btn btn-ghost btn-secondary h-12 w-12 mr-1" @click="goBack">
           <span class="text-primary-content">
@@ -56,7 +56,7 @@
         <div class="mb-6">
           <div class="flex items-center justify-between mb-2">
             <h3 class="text-xl font-semibold">Операционные системы</h3>
-            <button class="btn btn-square bg-neutral-50 font-semibold text-2xl text-neutral-50-content "><span class="mb-1">+</span></button>
+            <button class="btn btn-square bg-neutral-50 font-semibold text-2xl text-neutral-50-content mr-3"><span class="mb-1">+</span></button>
           </div>
           <div class="overflow-x-auto bg-base-100 text-base-content">
             <table class="table">
@@ -74,10 +74,15 @@
                 <td>{{ item.version }}</td>
                 <td>{{ item.description }}</td>
                 <td class="text-right">
-                  <div class="flex justify-end space-x-2">
-                    <button class="btn btn-square bg-neutral-50 text-neutral-50-content">
+                  <div class="flex justify-end space-x-1">
+                    <button class="btn btn-square btn-sm bg-neutral-50 text-neutral-50-content">
                       <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                      </svg>
+                    </button>
+                    <button class="btn btn-square btn-sm bg-neutral-50 text-neutral-50-content">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                       </svg>
                     </button>
                   </div>
@@ -92,7 +97,7 @@
         <div class="mb-6">
           <div class="flex items-center justify-between mb-2">
             <h3 class="text-xl font-semibold">Софт</h3>
-            <button class="btn btn-square bg-neutral-50 font-semibold text-2xl text-neutral-50-content "><span class="mb-1">+</span></button>
+            <button class="btn btn-square bg-neutral-50 font-semibold text-2xl text-neutral-50-content mr-3"><span class="mb-1">+</span></button>
           </div>
           <div class="overflow-x-auto bg-base-100 text-base-content">
             <table class="table">
@@ -111,11 +116,18 @@
                 <td>{{ item.ip }}</td>
                 <td>{{ item.description }}</td>
                 <td class="text-right">
-                  <button class="btn btn-square bg-neutral-50 text-neutral-50-content">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                    </svg>
-                  </button>
+                  <div class="flex justify-end space-x-1">
+                    <button class="btn btn-square btn-sm bg-neutral-50 text-neutral-50-content">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                      </svg>
+                    </button>
+                    <button class="btn btn-square btn-sm bg-neutral-50 text-neutral-50-content">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                  </div>
                 </td>
               </tr>
               </tbody>
@@ -127,7 +139,7 @@
         <div class="mb-6">
           <div class="flex items-center justify-between mb-2">
             <h3 class="text-xl font-semibold">Сервера</h3>
-            <button class="btn btn-square bg-neutral-50 font-semibold text-2xl text-neutral-50-content "><span class="mb-1">+</span></button>
+            <button class="btn btn-square bg-neutral-50 font-semibold text-2xl text-neutral-50-content mr-3"><span class="mb-1">+</span></button>
           </div>
           <div class="overflow-x-auto bg-base-100 text-base-content">
             <table class="table">
@@ -159,11 +171,18 @@
                   <td>{{ server.mapping }}</td>
                   <td>{{ server.description }}</td>
                   <td class="text-right">
-                    <button class="btn btn-square bg-neutral-50 text-neutral-50-content">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                      </svg>
-                    </button>
+                    <div class="flex justify-end space-x-1">
+                      <button class="btn btn-square btn-sm bg-neutral-50 text-neutral-50-content">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                        </svg>
+                      </button>
+                      <button class="btn btn-square btn-sm bg-neutral-50 text-neutral-50-content">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                      </button>
+                    </div>
                   </td>
                 </tr>
               </template>
@@ -176,7 +195,7 @@
         <div class="mb-6">
           <div class="flex items-center justify-between mb-2">
             <h3 class="text-xl font-semibold">Связи</h3>
-            <button class="btn btn-square bg-neutral-50 font-semibold text-2xl text-neutral-50-content "><span class="mb-1">+</span></button>
+            <button class="btn btn-square bg-neutral-50 font-semibold text-2xl text-neutral-50-content mr-3"><span class="mb-1">+</span></button>
           </div>
           <div class="overflow-x-auto bg-base-100 text-base-content">
             <table class="table">
@@ -195,11 +214,18 @@
                 <td>{{ item.ip }}</td>
                 <td>{{ item.description }}</td>
                 <td class="text-right">
-                  <button class="btn btn-square bg-neutral-50 text-neutral-50-content">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                    </svg>
-                  </button>
+                  <div class="flex justify-end space-x-1">
+                    <button class="btn btn-square btn-sm bg-neutral-50 text-neutral-50-content">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                      </svg>
+                    </button>
+                    <button class="btn btn-square btn-sm bg-neutral-50 text-neutral-50-content">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                  </div>
                 </td>
               </tr>
               </tbody>

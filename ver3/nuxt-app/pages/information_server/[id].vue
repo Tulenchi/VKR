@@ -1,5 +1,5 @@
 <template>
-  <div class="navbar bg-primary shadow-sm sticky top-0 z-40">
+  <div class="navbar bg-primary shadow-xl sticky top-0 z-40">
     <div class="navbar-start">
       <NuxtLink to="/">
         <button class="btn btn-ghost btn-secondary h-12 w-12 mr-1">
@@ -62,7 +62,7 @@
           <div class="flex items-center justify-between mb-2">
             <h3 class="text-xl font-semibold">IP-адреса</h3>
             <NuxtLink to="/redaction">
-              <button class="btn btn-square bg-neutral-50 font-semibold text-2xl text-neutral-50-content "><span class="mb-1">+</span></button>
+              <button class="btn btn-square bg-neutral-50 font-semibold text-2xl text-neutral-50-content mr-3"><span class="mb-1">+</span></button>
             </NuxtLink>
           </div>
           <div class="overflow-x-auto bg-base-100 text-base-content">
@@ -83,13 +83,13 @@
                 <td>{{ item.type }}</td>
                 <td>{{ item.description }}</td>
                 <td class="text-right">
-                  <div class="flex justify-end space-x-2">
-                    <button class="btn btn-square bg-neutral-50 text-neutral-50-content">
+                  <div class="flex justify-end space-x-1">
+                    <button class="btn btn-sm btn-square bg-neutral-50 text-neutral-50-content">
                       <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                       </svg>
                     </button>
-                    <button class="btn btn-square bg-neutral-50 text-neutral-50-content" @click="deleteIpAddress(index)">
+                    <button class="btn btn-sm btn-square bg-neutral-50 text-neutral-50-content" @click="deleteIpAddress(index)">
                       <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                       </svg>
@@ -106,7 +106,7 @@
         <div class="mb-6">
           <div class="flex items-center justify-between mb-2">
             <h3 class="text-xl font-semibold">Порты</h3>
-            <button class="btn btn-square bg-neutral-50 font-semibold text-2xl text-neutral-50-content "><span class="mb-1">+</span></button>
+            <button class="btn btn-square bg-neutral-50 font-semibold text-2xl text-neutral-50-content mr-3"><span class="mb-1">+</span></button>
           </div>
           <div class="overflow-x-auto bg-base-100 text-base-content">
             <table class="table">
@@ -125,11 +125,18 @@
                 <td>{{ item.ip }}</td>
                 <td>{{ item.description }}</td>
                 <td class="text-right">
-                  <button class="btn btn-square bg-neutral-50 text-neutral-50-content">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                    </svg>
-                  </button>
+                  <div class="flex justify-end space-x-1">
+                    <button class="btn btn-sm btn-square bg-neutral-50 text-neutral-50-content">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                      </svg>
+                    </button>
+                    <button class="btn btn-sm btn-square bg-neutral-50 text-neutral-50-content" @click="deletePort(index)">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                  </div>
                 </td>
               </tr>
               </tbody>
@@ -141,7 +148,7 @@
         <div class="mb-6">
           <div class="flex items-center justify-between mb-2">
             <h3 class="text-xl font-semibold">Домены</h3>
-            <button class="btn btn-square bg-neutral-50 font-semibold text-2xl text-neutral-50-content "><span class="mb-1">+</span></button>
+            <button class="btn btn-square bg-neutral-50 font-semibold text-2xl text-neutral-50-content mr-3"><span class="mb-1">+</span></button>
           </div>
           <div class="overflow-x-auto bg-base-100 text-base-content">
             <table class="table">
@@ -160,11 +167,18 @@
                 <td>{{ item.domain }}</td>
                 <td>{{ item.description }}</td>
                 <td class="text-right">
-                  <button class="btn btn-square bg-neutral-50 text-neutral-50-content">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                    </svg>
-                  </button>
+                  <div class="flex justify-end space-x-1">
+                    <button class="btn btn-sm btn-square bg-neutral-50 text-neutral-50-content">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                      </svg>
+                    </button>
+                    <button class="btn btn-sm btn-square bg-neutral-50 text-neutral-50-content" @click="deleteDomain(index)">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                  </div>
                 </td>
               </tr>
               </tbody>
@@ -176,7 +190,7 @@
         <div class="mb-6">
           <div class="flex items-center justify-between mb-2">
             <h3 class="text-xl font-semibold">Конфигурация</h3>
-            <button class="btn btn-square bg-neutral-50 font-semibold text-2xl text-neutral-50-content "><span class="mb-1">+</span></button>
+            <button class="btn btn-square bg-neutral-50 font-semibold text-2xl text-neutral-50-content mr-3"><span class="mb-1">+</span></button>
           </div>
           <div class="overflow-x-auto bg-base-100 text-base-content">
             <table class="table">
@@ -193,11 +207,18 @@
                 <td>{{ item.value }}</td>
                 <td>{{ item.description }}</td>
                 <td class="text-right">
-                  <button class="btn btn-square bg-neutral-50 text-neutral-50-content">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                    </svg>
-                  </button>
+                  <div class="flex justify-end space-x-1">
+                    <button class="btn btn-sm btn-square bg-neutral-50 text-neutral-50-content">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                      </svg>
+                    </button>
+                    <button class="btn btn-sm btn-square bg-neutral-50 text-neutral-50-content" @click="deleteConfiguration(index)">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                  </div>
                 </td>
               </tr>
               </tbody>
@@ -210,7 +231,7 @@
         <div class="mb-6">
         <div class="flex items-center justify-between mb-2">
           <h3 class="text-xl font-semibold">Приложения</h3>
-          <button class="btn btn-square bg-neutral-50 font-semibold text-2xl text-neutral-50-content "><span class="mb-1">+</span></button>
+          <button class="btn btn-square bg-neutral-50 font-semibold text-2xl text-neutral-50-content mr-3"><span class="mb-1">+</span></button>
         </div>
         <div class="overflow-x-auto bg-base-100 text-base-content">
           <table class="table">
@@ -229,11 +250,18 @@
               <td>{{ item.type }}</td>
               <td>{{ item.description }}</td>
               <td class="text-right">
-                <button class="btn btn-square bg-neutral-50 text-neutral-50-content">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                  </svg>
-                </button>
+                <div class="flex justify-end space-x-1">
+                  <button class="btn btn-sm btn-square bg-neutral-50 text-neutral-50-content">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                    </svg>
+                  </button>
+                  <button class="btn btn-sm btn-square bg-neutral-50 text-neutral-50-content" @click="deleteApplication(index)">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
               </td>
             </tr>
             </tbody>
@@ -254,12 +282,12 @@ const selectedCluster = ref(clusters[0])
 
 // Данные серверов
 const serversData = {
-  1: { title: "Личный кабинет", ip: "10.136.2.40", domain: "lk.etu.ru", serverId: 1 },
-  2: { title: "Посещаемость", ip: "10.136.2.40", domain: "digital.etu.ru", serverId: 2 },
-  3: { title: "Медиатека", ip: "10.136.2.40", domain: "media.etu.ru", serverId: 3 },
-  4: { title: "Библиотека", ip: "10.136.2.40", domain: "library.etu.ru", serverId: 4 },
-  5: { title: "Moodle", ip: "10.136.2.40", domain: "vec.etu.ru", serverId: 5 },
-  6: { title: "Лэти", ip: "10.136.2.40", domain: "etu.ru", serverId: 6 }
+  'srv-1': { title: "Личный кабинет", ip: "10.136.2.40", domain: "lk.etu.ru", serverId: 1 },
+  'srv-2': { title: "Посещаемость", ip: "10.136.2.40", domain: "digital.etu.ru", serverId: 2 },
+  'srv-3': { title: "Медиатека", ip: "10.136.2.40", domain: "media.etu.ru", serverId: 3 },
+  'srv-4': { title: "Библиотека", ip: "10.136.2.40", domain: "library.etu.ru", serverId: 4 },
+  'srv-5': { title: "Moodle", ip: "10.136.2.40", domain: "vec.etu.ru", serverId: 5 },
+  'srv-6': { title: "Лэти", ip: "10.136.2.40", domain: "etu.ru", serverId: 6 }
 }
 
 // Получаем данные сервера по ID из URL
