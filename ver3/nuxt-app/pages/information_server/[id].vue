@@ -23,7 +23,7 @@
       </NuxtLink>
     </div>
     <div class="navbar-center">
-      <a class="text-2xl text-primary-content">{{ serverData.title }}</a>
+      <a class="text-2xl text-primary-content">{{ server?.server_name }}</a>
     </div>
     <div class="navbar-end text-primary-content">
       <ThemeSwitcher />
@@ -36,11 +36,20 @@
 
         <!-- Система -->
         <div class="mb-2">
-          <div class="flex items-center justify-between mb-2">
-            <h3 class="text-xl font-semibold">Система</h3>
-            <NuxtLink to="/information_system">
-              <button class="btn px-5 truncate bg-neutral-50 text-neutral-50-content sm:min-w-60 md:min-w-80">SystemName</button>
-            </NuxtLink>
+          <h3 class="text-xl font-semibold mb-2">Система</h3>
+          <div class="space-y-2"> <!-- Добавляем вертикальные отступы между элементами -->
+            <div
+                v-for="system in server?.system_id"
+                :key="system.system_id"
+                class="flex items-center justify-between"
+            >
+              <span class="text-lg">{{ system.system_name }}</span>
+              <NuxtLink to="/information_system">
+                <button class="btn px-5 truncate bg-neutral-50 text-neutral-50-content sm:min-w-60 md:min-w-80">
+                  Подробнее
+                </button>
+              </NuxtLink>
+            </div>
           </div>
         </div>
 
@@ -275,6 +284,15 @@
 
 <script setup>
 const route = useRoute()
+const serverStore = useServerStore()
+
+const serverId = computed(() => route.params.id)
+const server = computed(() => serverStore.currentServer)
+const loading = computed(() => serverStore.loading)
+
+onMounted(async () => {
+  await serverStore.fetchServerById(serverId.value)
+})
 
 // Кластер
 const clusters = ['Кластер №1', 'Кластер №2', 'Кластер №3']
@@ -282,12 +300,12 @@ const selectedCluster = ref(clusters[0])
 
 // Данные серверов
 const serversData = {
-  'srv-1': { title: "Личный кабинет", ip: "10.136.2.40", domain: "lk.etu.ru", serverId: 1 },
-  'srv-2': { title: "Посещаемость", ip: "10.136.2.40", domain: "digital.etu.ru", serverId: 2 },
-  'srv-3': { title: "Медиатека", ip: "10.136.2.40", domain: "media.etu.ru", serverId: 3 },
-  'srv-4': { title: "Библиотека", ip: "10.136.2.40", domain: "library.etu.ru", serverId: 4 },
-  'srv-5': { title: "Moodle", ip: "10.136.2.40", domain: "vec.etu.ru", serverId: 5 },
-  'srv-6': { title: "Лэти", ip: "10.136.2.40", domain: "etu.ru", serverId: 6 }
+  'personal-account': { title: "Личный кабинет", ip: "10.136.2.40", domain: "lk.etu.ru", serverId: 1 },
+  'attendance': { title: "Посещаемость", ip: "10.136.2.40", domain: "digital.etu.ru", serverId: 2 },
+  'media-library': { title: "Медиатека", ip: "10.136.2.40", domain: "media.etu.ru", serverId: 3 },
+  'library': { title: "Библиотека", ip: "10.136.2.40", domain: "library.etu.ru", serverId: 4 },
+  'moodle': { title: "Moodle", ip: "10.136.2.40", domain: "vec.etu.ru", serverId: 5 },
+  'leti': { title: "Лэти", ip: "10.136.2.40", domain: "etu.ru", serverId: 6 }
 }
 
 // Получаем данные сервера по ID из URL

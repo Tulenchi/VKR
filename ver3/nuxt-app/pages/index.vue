@@ -38,11 +38,11 @@
       <div class="space-y-4">
         <ServerCardMain
             v-for="server in store.servers"
-            :key="server.id"
-            :title="server.name"
-            :ip="server.ip_addresses"
-            :domain="server.domain_name.name"
-            :server-id="server.id"
+            :key="server.server_id"
+            :title="server.server_name"
+            :ip="server.ip"
+            :domain="server.domain_name.domain_name"
+            :server-id="server.server_id"
         />
       </div>
     </main>

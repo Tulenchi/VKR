@@ -83,6 +83,7 @@ export const testNetworkPorts: NetworkPort[] = [
 export const testIpAddresses: IpAddress[] = [
     {
         ip: '10.136.2.40',
+        id_ip: 'efae8aa7-a1e3-4eee-b140-db6debb44856',
         version: 'IpV4',
         description: 'null',
         port: testNetworkPorts[0],
@@ -90,6 +91,7 @@ export const testIpAddresses: IpAddress[] = [
     },
     {
         ip: 'fd00::1',
+        id_ip: '068ccdfc-9ba1-47a6-b1c9-02e67bbb9801',
         version: 'IpV6',
         description: 'null',
         port: testNetworkPorts[1],
@@ -251,7 +253,7 @@ export const testServerUnits: ServerUnit[] = [
     {
         server_type: 'virtual',
         server_name: 'Личный кабинет',
-        server_id: 'srv-1',
+        server_id: 'personal-account',
         description: 'null',
         ip: testIpAddresses.slice(0),
         cluster_name: testServerCluster[0],
@@ -264,7 +266,7 @@ export const testServerUnits: ServerUnit[] = [
     {
         server_type: 'virtual',
         server_name: 'Посещаемость',
-        server_id: 'srv-2',
+        server_id: 'attendance',
         description: 'null',
         ip: testIpAddresses.slice(1),
         cluster_name: testServerCluster[0],
@@ -277,7 +279,7 @@ export const testServerUnits: ServerUnit[] = [
     {
         server_type: 'virtual',
         server_name: 'Медиатека',
-        server_id: 'srv-3',
+        server_id: 'media-library',
         description: 'null',
         ip: testIpAddresses.slice(0, 1),
         cluster_name: testServerCluster[1],
@@ -290,7 +292,7 @@ export const testServerUnits: ServerUnit[] = [
     {
         server_type: 'virtual',
         server_name: 'Библиотека',
-        server_id: 'srv-4',
+        server_id: 'library',
         description: 'null',
         ip: testIpAddresses.slice(0, 1),
         cluster_name: testServerCluster[1],
@@ -303,7 +305,7 @@ export const testServerUnits: ServerUnit[] = [
     {
         server_type: 'virtual',
         server_name: 'Moodle',
-        server_id: 'srv-5',
+        server_id: 'moodle',
         description: 'null',
         ip: testIpAddresses.slice(0),
         cluster_name: testServerCluster[2],
@@ -316,7 +318,7 @@ export const testServerUnits: ServerUnit[] = [
     {
         server_type: 'virtual',
         server_name: 'Лэти',
-        server_id: 'srv-6',
+        server_id: 'leti',
         description: 'null',
         ip: testIpAddresses.slice(1),
         cluster_name: testServerCluster[2],

@@ -10,7 +10,7 @@
           <div class="flex flex-col md:flex-row md:items-center md:gap-8 mt-2">
             <div class="flex items-center gap-2">
               <div class="font-mono text-sm md:text-base flex flex-col md:flex-row gap-2">
-                <span v-for="ipaaray in ip" :key="ipaaray.id"> {{ ipaaray.name }}
+                <span v-for="ipaaray in ip" :key="ipaaray.id"> {{ ipaaray.ip }}
                 </span>
               </div>
             </div>
