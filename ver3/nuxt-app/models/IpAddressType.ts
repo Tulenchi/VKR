@@ -1,4 +1,5 @@
+type slug = string;
+
 export interface IpAddressType {
-    id: 'internal' | 'external';
-    name: string;
+    identifier: slug; // 'internal' | 'external'; // primary key
 }

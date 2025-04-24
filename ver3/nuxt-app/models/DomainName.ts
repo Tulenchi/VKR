@@ -1,6 +1,6 @@
 import type {IpAddress} from "~/models/IpAddress";
 
 export interface DomainName {
-    id: string;
-    name: string;
+    domain_name: string;
+    ip: IpAddress[];
 }

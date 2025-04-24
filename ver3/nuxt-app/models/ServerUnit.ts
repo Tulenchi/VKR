@@ -4,22 +4,20 @@ import type {Hardware} from "~/models/Hardware";
 import type {Software} from "~/models/Software";
 import type {SystemName} from "~/models/SystemName";
 import type {DomainName} from "~/models/DomainName";
+import type {Group} from "~/models/Group";
 type cidr = string;
+type slug = string;
 
 export interface ServerUnit {
-    server_name: string;
-    ip: cidr;
-    domain_name: string;
-    group_name: string;
-    software_name: string;
-    hardware_name: string;
-    id: string;
-    description: string | null;
     server_type: string;
-    cluster: ServerCluster;
-    ip_addresses: IpAddress[];
-    hardware: Hardware[];
-    software: Software[];
-    systemName: SystemName;
-    domainName: DomainName;
+    server_name: string;
+    server_id: slug; // primary key
+    description: string;
+    ip: IpAddress[]; // foreign key
+    cluster_name: ServerCluster; // foreign key
+    system_id: SystemName[]; // foreign key
+    domain_name: DomainName; // foreign key
+    group_id: Group[]; // foreign key
+    software_id: Software[]; // foreign key
+    hardware_id: Hardware[]; // foreign key
 }

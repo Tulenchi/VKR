@@ -1,13 +1,11 @@
-import type {DomainName} from "~/models/DomainName";
 import type {IpAddressType} from "~/models/IpAddressType";
-import type {ServerUnit} from "~/models/ServerUnit";
 import type {NetworkPort} from "~/models/NetworkPort";
+type cidr = string;
 
 export interface IpAddress {
-    id: string;
-    name: string;
+    ip: cidr; // primary key
     version: string;
-    description: string | null;
-    type: IpAddressType;
-    domain_names: DomainName[];
+    description: string;
+    port: NetworkPort; // foreign key
+    identifier: IpAddressType; // foreign key
 }

@@ -1,11 +1,11 @@
 import type {HardwareType} from "~/models/HardwareType";
-import type {HardwareMeasurementUnit} from "~/models/HardwareMeasurementUnit";
+type double = number;
+type uuid = string;
 
 export interface Hardware {
-    id: string;
-    type: HardwareType;
-    name: string | null;
-    value: number;
-    measurement: HardwareMeasurementUnit;
-    description: string | null;
+    hardware_id: uuid;
+    hardware_name: string; // если null то применяется имя по умолчанию из типа аппаратной конфигурации
+    value: double;
+    description: string;
+    type_id: HardwareType;
 }

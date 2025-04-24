@@ -1,9 +1,8 @@
 import type {NetworkProtocol} from "~/models/NetworkProtocol";
-import type {IpAddress} from "~/models/IpAddress";
+type int = number;
 
 export interface NetworkPort {
-    id: string;
-    port: number;
-    description: string | null;
-    protocol: NetworkProtocol;
+    port: int; // primary key
+    description: string;
+    id_network: NetworkProtocol[]; // foreign key
 }

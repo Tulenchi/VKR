@@ -1,12 +1,15 @@
 import type {NetworkPort} from "~/models/NetworkPort";
-import type {SoftwareVersion} from "~/models/SoftwareVersion";
+import type {Software} from "~/models/Software";
 import type {ServerUnit} from "~/models/ServerUnit";
+import type {Group} from "~/models/Group";
+type uuid = string;
 
 export interface SystemName {
-    id: string;
-    name: string;
-    software_versions: SoftwareVersion[];
-    ports: NetworkPort[];
+    system_id: uuid; // primary key
+    system_name: string;
     type: string;
-    description: string | null;
+    description: string;
+    software_id: Software[]; // foreign key
+    port: NetworkPort[]; // foreign key
+    group_id: Group[]; // foreign key
 }

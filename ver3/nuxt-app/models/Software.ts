@@ -1,8 +1,8 @@
 import type {SoftwareVersion} from "~/models/SoftwareVersion";
-import type {ServerUnit} from "~/models/ServerUnit";
+type uuid = string;
 
 export interface Software {
-    id: string;
-    version: SoftwareVersion;
-    description: string | null;
+    software_id: uuid;
+    version_name: SoftwareVersion;
+    description: string;
 }

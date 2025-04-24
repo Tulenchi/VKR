@@ -1,5 +1,6 @@
+type slug = string;
+
 export interface NetworkProtocol {
-    id: string;
-    name: string;
-    port: number | null;
+    network_type: string;
+    id_network: slug;
 }

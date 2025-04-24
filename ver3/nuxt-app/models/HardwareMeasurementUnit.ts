@@ -1,6 +1,8 @@
+type slug = string;
+
 export interface HardwareMeasurementUnit {
-    id: string;
-    name_singular: string;
-    name_small_plural: string;
-    name_plural: string;
+    MU_id: slug;
+    singular_name: string;
+    small_plural_name: string;
+    plural_name: string;
 }
