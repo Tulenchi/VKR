@@ -6,30 +6,44 @@ export const useServerStore = defineStore('serverStore', {
     state: () => ({
         servers: [] as ServerUnit[],
         loading: false,
-        currentServer: null as ServerUnit | null
+        currentServer: null as ServerUnit | null,
+        cache: new Map<string, ServerUnit>() // кеш для избежания повторных загрузок
     }),
 
     getters: {
         getServerById: (state) => (id: string) => {
-            return state.servers.find(server => server.server_id === id)
+            return state.cache.get(id) || state.servers.find(server => server.server_id === id);
         },
     },
 
     actions: {
         async fetchServers() {
+            if (this.servers.length > 0) return; // если уже загружены
+
             this.loading = true;
             try {
                 this.servers = testServerUnits;
+                testServerUnits.forEach(server => {
+                    this.cache.set(server.server_id, server);
+                }); // заполняем кеш
             } finally {
                 this.loading = false;
             }
         },
 
         async fetchServerById(id: string) {
+            if (this.cache.has(id)) {
+                this.currentServer = this.cache.get(id)!;
+                return;
+            } // проверка кеша перед запросом
+
             this.loading = true;
             try {
                 const server = testServerUnits.find(s => s.server_id === id);
-                this.currentServer = server || null;
+                if (server) {
+                    this.currentServer = server;
+                    this.cache.set(id, server);
+                }
                 return server;
             } finally {
                 this.loading = false;

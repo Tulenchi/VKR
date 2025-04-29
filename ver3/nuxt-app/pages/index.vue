@@ -40,23 +40,27 @@
             v-for="server in store.servers"
             :key="server.server_id"
             :title="server.server_name"
-            :ip="server.ip"
-            :domain="server.domain_name.domain_name"
+            :ip="server.id_ip"
+            :domain="server.domain_id.domain_name"
             :server-id="server.server_id"
         />
       </div>
     </main>
+
+  <div class="add">
+    <div class="tooltip tooltip-primary tooltip-left" data-tip="Добавление сервера">
+      <button class="btn btn-xl btn-square bg-neutral text-neutral-50-content shadow-md font-semibold text-3xl"><span class="mb-1">+</span></button>
+    </div>
+  </div>
+
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue';
 import { useServerStore } from '@/stores/ServerStore';
 
 const store = useServerStore();
 
-onMounted(() => {
-  store.fetchServers();
-});
+store.fetchServers();
 
   useSeoMeta({
   title: 'Сервера ОИС',
@@ -66,3 +70,11 @@ onMounted(() => {
   })
 
 </script>
+
+<style lang="css" scoped>
+.add{
+  position: fixed;
+  bottom: 20px;
+  right: 15px;
+}
+</style>

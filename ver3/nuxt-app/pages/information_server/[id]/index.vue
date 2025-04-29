@@ -1,7 +1,7 @@
 <template>
   <div class="navbar bg-primary shadow-xl sticky top-0 z-40">
     <div class="navbar-start">
-      <NuxtLink to="/">
+      <NuxtLink :to="{ name: 'index' }">
         <button class="btn btn-ghost btn-secondary h-12 w-12 mr-1">
           <span class="text-primary-content">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="34" height="34" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none">
@@ -23,7 +23,7 @@
       </NuxtLink>
     </div>
     <div class="navbar-center">
-      <a class="text-2xl text-primary-content">{{ server?.server_name }}</a>
+      <a class="text-2xl text-primary-content">{{ server.server_name }}</a>
     </div>
     <div class="navbar-end text-primary-content">
       <ThemeSwitcher />
@@ -36,8 +36,8 @@
 
         <!-- Система -->
         <div class="mb-2">
-          <h3 class="text-xl font-semibold mb-2">Система</h3>
-          <div class="space-y-2"> <!-- Добавляем вертикальные отступы между элементами -->
+          <h3 class="text-xl font-semibold mb-2">Системы</h3>
+          <div class="space-y-2">
             <div
                 v-for="system in server?.system_id"
                 :key="system.system_id"
@@ -70,7 +70,7 @@
         <div class="mb-6">
           <div class="flex items-center justify-between mb-2">
             <h3 class="text-xl font-semibold">IP-адреса</h3>
-            <NuxtLink to="/redaction">
+            <NuxtLink :to="{ name: 'information_server-id-tables-ip_address-add', params: { id: serverId }}">
               <button class="btn btn-square bg-neutral-50 font-semibold text-2xl text-neutral-50-content mr-3"><span class="mb-1">+</span></button>
             </NuxtLink>
           </div>
@@ -86,19 +86,21 @@
               </tr>
               </thead>
               <tbody>
-              <tr v-for="(item, index) in ipAddresses" :key="index">
-                <td>{{ item.ip }}</td>
-                <td>{{ item.version }}</td>
-                <td>{{ item.type }}</td>
-                <td>{{ item.description }}</td>
+              <tr v-for="(ip, index) in server.id_ip" :key="index">
+                <td>{{ ip.ip }}</td>
+                <td>{{ ip.version }}</td>
+                <td>{{ ip.identifier.identifier }}</td>
+                <td>{{ ip.description }}</td>
                 <td class="text-right">
                   <div class="flex justify-end space-x-1">
+                    <NuxtLink :to="{ name: 'information_server-id-tables-ip_address-rowId', params: { id: serverId, rowId: ip.id_ip }}" >
+                      <button class="btn btn-sm btn-square bg-neutral-50 text-neutral-50-content">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                        </svg>
+                      </button>
+                    </NuxtLink>
                     <button class="btn btn-sm btn-square bg-neutral-50 text-neutral-50-content">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                      </svg>
-                    </button>
-                    <button class="btn btn-sm btn-square bg-neutral-50 text-neutral-50-content" @click="deleteIpAddress(index)">
                       <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                       </svg>
@@ -115,7 +117,9 @@
         <div class="mb-6">
           <div class="flex items-center justify-between mb-2">
             <h3 class="text-xl font-semibold">Порты</h3>
-            <button class="btn btn-square bg-neutral-50 font-semibold text-2xl text-neutral-50-content mr-3"><span class="mb-1">+</span></button>
+            <NuxtLink :to="{ name: 'information_server-id-tables-ports-add', params: { id: serverId }}">
+              <button class="btn btn-square bg-neutral-50 font-semibold text-2xl text-neutral-50-content mr-3"><span class="mb-1">+</span></button>
+            </NuxtLink>
           </div>
           <div class="overflow-x-auto bg-base-100 text-base-content">
             <table class="table">
@@ -128,11 +132,11 @@
               </tr>
               </thead>
               <tbody>
-              <tr v-for="(item, index) in ports" :key="index">
-                <td>{{ item.protocol }}</td>
-                <td>{{ item.port }}</td>
-                <td>{{ item.ip }}</td>
-                <td>{{ item.description }}</td>
+              <tr v-for="(ip, index) in server.id_ip" :key="index">
+                <td>{{ ip.id_port.id_network.map(np => np.network_type).join(', ') }}</td>
+                <td>{{ ip.id_port.port }}</td>
+                <td>{{ ip.ip }}</td>
+                <td>{{ ip.id_port.description }}</td>
                 <td class="text-right">
                   <div class="flex justify-end space-x-1">
                     <button class="btn btn-sm btn-square bg-neutral-50 text-neutral-50-content">
@@ -140,7 +144,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                       </svg>
                     </button>
-                    <button class="btn btn-sm btn-square bg-neutral-50 text-neutral-50-content" @click="deletePort(index)">
+                    <button class="btn btn-sm btn-square bg-neutral-50 text-neutral-50-content">
                       <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                       </svg>
@@ -157,7 +161,9 @@
         <div class="mb-6">
           <div class="flex items-center justify-between mb-2">
             <h3 class="text-xl font-semibold">Домены</h3>
-            <button class="btn btn-square bg-neutral-50 font-semibold text-2xl text-neutral-50-content mr-3"><span class="mb-1">+</span></button>
+            <NuxtLink :to="{ name: 'information_server-id-tables-domains-add', params: { id: serverId }}">
+              <button class="btn btn-square bg-neutral-50 font-semibold text-2xl text-neutral-50-content mr-3"><span class="mb-1">+</span></button>
+            </NuxtLink>
           </div>
           <div class="overflow-x-auto bg-base-100 text-base-content">
             <table class="table">
@@ -170,11 +176,11 @@
               </tr>
               </thead>
               <tbody>
-              <tr v-for="(item, index) in domains" :key="index">
-                <td>{{ item.dns }}</td>
-                <td>{{ item.ip }}</td>
-                <td>{{ item.domain }}</td>
-                <td>{{ item.description }}</td>
+              <tr v-for="(ip, index) in server.domain_id.id_ip">
+                <td>{{ ip.DNS }}</td>
+                <td>{{ ip.ip }}</td>
+                <td>{{ server.domain_id.domain_name }}</td>
+                <td>{{ server.domain_id.description }}</td>
                 <td class="text-right">
                   <div class="flex justify-end space-x-1">
                     <button class="btn btn-sm btn-square bg-neutral-50 text-neutral-50-content">
@@ -182,7 +188,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                       </svg>
                     </button>
-                    <button class="btn btn-sm btn-square bg-neutral-50 text-neutral-50-content" @click="deleteDomain(index)">
+                    <button class="btn btn-sm btn-square bg-neutral-50 text-neutral-50-content">
                       <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                       </svg>
@@ -199,7 +205,9 @@
         <div class="mb-6">
           <div class="flex items-center justify-between mb-2">
             <h3 class="text-xl font-semibold">Конфигурация</h3>
-            <button class="btn btn-square bg-neutral-50 font-semibold text-2xl text-neutral-50-content mr-3"><span class="mb-1">+</span></button>
+            <NuxtLink :to="{ name: 'information_server-id-tables-configuration-add', params: { id: serverId }}">
+              <button class="btn btn-square bg-neutral-50 font-semibold text-2xl text-neutral-50-content mr-3"><span class="mb-1">+</span></button>
+            </NuxtLink>
           </div>
           <div class="overflow-x-auto bg-base-100 text-base-content">
             <table class="table">
@@ -222,7 +230,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                       </svg>
                     </button>
-                    <button class="btn btn-sm btn-square bg-neutral-50 text-neutral-50-content" @click="deleteConfiguration(index)">
+                    <button class="btn btn-sm btn-square bg-neutral-50 text-neutral-50-content">
                       <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                       </svg>
@@ -240,7 +248,9 @@
         <div class="mb-6">
         <div class="flex items-center justify-between mb-2">
           <h3 class="text-xl font-semibold">Приложения</h3>
-          <button class="btn btn-square bg-neutral-50 font-semibold text-2xl text-neutral-50-content mr-3"><span class="mb-1">+</span></button>
+          <NuxtLink :to="{ name: 'information_server-id-tables-applications-add', params: { id: serverId }}">
+            <button class="btn btn-square bg-neutral-50 font-semibold text-2xl text-neutral-50-content mr-3"><span class="mb-1">+</span></button>
+          </NuxtLink>
         </div>
         <div class="overflow-x-auto bg-base-100 text-base-content">
           <table class="table">
@@ -249,6 +259,8 @@
               <th>Name</th>
               <th>Version</th>
               <th>Type</th>
+              <th>Provider</th>
+              <th>Documentation</th>
               <th>Description</th>
             </tr>
             </thead>
@@ -257,6 +269,8 @@
               <td>{{ item.name }}</td>
               <td>{{ item.version }}</td>
               <td>{{ item.type }}</td>
+              <td>{{ item.provider }}</td>
+              <td>{{ item.documentation }}</td>
               <td>{{ item.description }}</td>
               <td class="text-right">
                 <div class="flex justify-end space-x-1">
@@ -265,7 +279,7 @@
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                     </svg>
                   </button>
-                  <button class="btn btn-sm btn-square bg-neutral-50 text-neutral-50-content" @click="deleteApplication(index)">
+                  <button class="btn btn-sm btn-square bg-neutral-50 text-neutral-50-content">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
@@ -283,49 +297,24 @@
 </template>
 
 <script setup>
-const route = useRoute()
-const serverStore = useServerStore()
+import { computed, watch } from 'vue';
+import { useRoute } from 'vue-router';
+import { useServerStore } from '@/stores/ServerStore';
 
-const serverId = computed(() => route.params.id)
-const server = computed(() => serverStore.currentServer)
-const loading = computed(() => serverStore.loading)
+const route = useRoute();
+const serverStore = useServerStore();
 
-onMounted(async () => {
-  await serverStore.fetchServerById(serverId.value)
-})
+const serverId = computed(() => route.params.id);
+const server = computed(() => serverStore.getServerById(serverId.value));
+const loading = computed(() => serverStore.loading);
+
+watch(serverId, (newId) => {
+  serverStore.fetchServerById(newId);
+}, { immediate: true });
 
 // Кластер
 const clusters = ['Кластер №1', 'Кластер №2', 'Кластер №3']
 const selectedCluster = ref(clusters[0])
-
-// Данные серверов
-const serversData = {
-  'personal-account': { title: "Личный кабинет", ip: "10.136.2.40", domain: "lk.etu.ru", serverId: 1 },
-  'attendance': { title: "Посещаемость", ip: "10.136.2.40", domain: "digital.etu.ru", serverId: 2 },
-  'media-library': { title: "Медиатека", ip: "10.136.2.40", domain: "media.etu.ru", serverId: 3 },
-  'library': { title: "Библиотека", ip: "10.136.2.40", domain: "library.etu.ru", serverId: 4 },
-  'moodle': { title: "Moodle", ip: "10.136.2.40", domain: "vec.etu.ru", serverId: 5 },
-  'leti': { title: "Лэти", ip: "10.136.2.40", domain: "etu.ru", serverId: 6 }
-}
-
-// Получаем данные сервера по ID из URL
-const serverData = serversData[route.params.id]
-
-// Данные для таблиц
-const ipAddresses = ref([
-  { ip: '10.136.2.40', version: 'IPv4', type: '192.168.11', description: 'Null' },
-  { ip: '10.136.2.40', version: 'IPv4', type: '203.0.113.1', description: 'Null' }
-])
-
-const ports = ref([
-  { protocol: 'HTTP', port: '8080', ip: '192.168.11', description: 'Null' },
-  { protocol: 'HTTPS', port: '443', ip: '203.0.113.1', description: 'Null' }
-])
-
-const domains = ref([
-  { dns: 'DNS', ip: '_', domain: '192.168.11', description: 'Null' },
-  { dns: 'DNS', ip: '_', domain: 'If', description: 'Null' }
-])
 
 const configurations = ref([
   { type: 'If', value: 'If', description: 'Null' },
@@ -333,35 +322,14 @@ const configurations = ref([
 ])
 
 const applications = ref([
-  { name: 'Postgress', version: '16.1', type: 'If', description: 'Null' },
-  { name: 'If', version: 'If', type: 'If', description: 'Null' }
+  { name: 'Postgress', version: '16.1', type: 'ff', provider: 'ff', documentation: 'ff', description: 'Null' },
+  { name: 'ff', version: 'ff', type: 'ff', provider: 'ff', documentation: 'ff', description: 'Null' }
 ])
 
-// Методы для удаления
-const deleteIpAddress = (index) => {
-  ipAddresses.value.splice(index, 1)
-}
-
-const deletePort = (index) => {
-  ports.value.splice(index, 1)
-}
-
-const deleteDomain = (index) => {
-  domains.value.splice(index, 1)
-}
-
-const deleteConfiguration = (index) => {
-  configurations.value.splice(index, 1)
-}
-
-const deleteApplication = (index) => {
-  applications.value.splice(index, 1)
-}
-
 useSeoMeta({
-  title: `Информация о сервере "${serverData.title}"`,
-  ogTitle: `Информация о сервере "${serverData.title}"`,
-  description: `Подробная информация о сервере "${serverData.title}"`,
-  ogDescription: `Подробная информация о сервере "${serverData.title}"`
+  title: `Информация о сервере "${server.value.server_name}"`,
+  ogTitle: `Информация о сервере "${server.value.server_name}"`,
+  description: `Подробная информация о сервере "${server.value.server_name}"`,
+  ogDescription: `Подробная информация о сервере "${server.value.server_name}"`
 })
 </script>

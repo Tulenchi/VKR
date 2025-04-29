@@ -7,7 +7,8 @@ export interface IpAddress {
     ip: cidr; // primary key
     id_ip: uuid; // primary key
     version: string;
+    DNS: string,
     description: string;
-    port: NetworkPort; // foreign key
+    id_port: NetworkPort; // foreign key
     identifier: IpAddressType; // foreign key
 }

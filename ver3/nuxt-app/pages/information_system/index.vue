@@ -157,11 +157,14 @@
                   <td colspan="5" class="relative text-center font-semibold bg-base-100 text-base-content py-3">
                     <div class="flex justify-between items-center">
                       <span class="flex-1 text-center">{{ serverGroup.name }}</span>
-                      <button class="btn btn-square btn-sm bg-neutral-50 text-neutral-50-content">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                      </button>
+                      <div class="flex justify-end space-x-1">
+                        <button class="btn btn-square btn-sm bg-neutral-50 text-2xl text-neutral-50-content"><span class="mb-1">+</span></button>
+                        <button class="btn btn-square btn-sm bg-neutral-50 text-neutral-50-content">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                          </svg>
+                        </button>
+                      </div>
                     </div>
                   </td>
                 </tr>
@@ -192,7 +195,7 @@
         </div>
 
         <!-- Связи -->
-        <div class="mb-6">
+        <!--<div class="mb-6">
           <div class="flex items-center justify-between mb-2">
             <h3 class="text-xl font-semibold">Связи</h3>
             <button class="btn btn-square bg-neutral-50 font-semibold text-2xl text-neutral-50-content mr-3"><span class="mb-1">+</span></button>
@@ -231,10 +234,17 @@
               </tbody>
             </table>
           </div>
-        </div>
+        </div>-->
       </div>
     </div>
   </div>
+
+  <div class="add">
+    <div class="tooltip tooltip-primary tooltip-left" data-tip="Добавление системы">
+      <button class="btn btn-xl btn-square bg-neutral-50 text-neutral-50-content shadow-md font-semibold text-3xl"><span class="mb-1">+</span></button>
+    </div>
+  </div>
+
 </template>
 
 <script lang="ts" setup>
@@ -288,3 +298,11 @@ useSeoMeta({
   ogDescription: 'Подробная информация о системе'
 })
 </script>
+
+<style lang="css" scoped>
+.add{
+  position: fixed;
+  bottom: 20px;
+  right: 15px;
+}
+</style>

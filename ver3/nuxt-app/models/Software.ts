@@ -1,8 +1,9 @@
-import type {SoftwareVersion} from "~/models/SoftwareVersion";
+import type {SoftwareType} from "~/models/SoftwareType";
 type uuid = string;
 
 export interface Software {
     software_id: uuid;
-    version_name: SoftwareVersion;
+    software_name: string;
     description: string;
+    type_id: SoftwareType;
 }

@@ -1,38 +1,38 @@
 <template>
-    <div class="navbar bg-primary shadow-sm">
-      <div class="navbar-start">
-        <button class="btn btn-ghost btn-secondary h-12 w-12 mr-1" @click="goBack">
+  <div class="navbar bg-primary shadow-sm">
+    <div class="navbar-start">
+      <button class="btn btn-ghost btn-secondary h-12 w-12 mr-1" @click="goBack">
           <span class="text-primary-content">
             <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <line x1="19" y1="12" x2="5" y2="12"></line>
               <polyline points="12 19 5 12 12 5"></polyline>
             </svg>
           </span>
-        </button>
-        <NuxtLink to="/">
-          <button class="btn btn-ghost btn-secondary h-12 w-12">
+      </button>
+      <NuxtLink to="/">
+        <button class="btn btn-ghost btn-secondary h-12 w-12">
           <span class="text-primary-content">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="34" height="34" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none">
               <path d="M12 3L2 12h3v8h5v-6h4v6h5v-8h3L12 3z" />
             </svg>
           </span>
-          </button>
-        </NuxtLink>
-      </div>
-      <div class="navbar-center">
-        <a class="text-2xl text-primary-content">Добавление IP-адреса</a>
-      </div>
-      <div class="navbar-end text-primary-content">
-        <ThemeSwitcher />
-        <button class="btn btn-ghost btn-secondary h-12 w-12 ml-2" @click="goBack">
+        </button>
+      </NuxtLink>
+    </div>
+    <div class="navbar-center">
+      <a class="text-2xl text-primary-content">Добавление приложения</a>
+    </div>
+    <div class="navbar-end text-primary-content">
+      <ThemeSwitcher />
+      <button class="btn btn-ghost btn-secondary h-12 w-12 ml-2" @click="goBack">
           <span class="text-primary-content">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="30">
               <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" fill="currentColor"/>
             </svg>
           </span>
-        </button>
-      </div>
+      </button>
     </div>
+  </div>
 
   <main class="container mx-auto px-4 py-8 max-w-3xl">
     <div class="card bg-neutral text-neutral-content shadow-xl">
@@ -40,14 +40,14 @@
 
         <div class="mb-2">
           <div class="flex items-center justify-between mb-2">
-            <h3 class="text-xl font-semibold">IP-адрес</h3>
+            <h3 class="text-xl font-semibold">Приложение</h3>
           </div>
         </div>
 
         <div class="mb-2">
           <div class="flex items-center justify-between mb-2">
-            <h3 class="text-xl font-semibold">IP</h3>
-              <input type="text" placeholder="Type here" class="input input-neutral input-base-100" />
+            <h3 class="text-xl font-semibold">Name</h3>
+            <input type="text" placeholder="Type here" class="input input-neutral input-base-100" />
           </div>
         </div>
 
@@ -66,6 +66,20 @@
         </div>
 
         <div class="mb-2">
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="text-xl font-semibold">Provider</h3>
+            <input type="text" placeholder="Type here" class="input input-neutral input-base-100" />
+          </div>
+        </div>
+
+        <div class="mb-2">
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="text-xl font-semibold">Documentation</h3>
+            <input type="text" placeholder="Type here" class="input input-neutral input-base-100" />
+          </div>
+        </div>
+
+        <div class="mb-2">
           <div class="flex justify-between mb-2">
             <h3 class="text-xl font-semibold">Description</h3>
             <textarea type="text" placeholder="Type here" class="textarea textarea-neutral resize-none overflow-hidden" rows="5" @input="autoResizeTextarea" ref="textarea"></textarea>
@@ -76,7 +90,7 @@
   </main>
 
   <div class="delete">
-    <button class="btn btn-xl btn-square bg-neutral-50 text-neutral-50-content" @click="showPopup">
+    <button class="btn btn-xl btn-square shadow-md bg-neutral-50 text-neutral-50-content" @click="showPopup">
       <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6L20 6M6 6l0 15M17 6l0 15M6 21L17 21M8 2L15 2" /></svg>
     </button>
   </div>
@@ -112,8 +126,8 @@ const showPopup = () => {
 }
 
 useSeoMeta({
-  title: 'Добавление IP-адреса',
-  ogTitle: 'Добавление IP-адреса',
+  title: 'Добавление приложения',
+  ogTitle: 'Добавление приложения',
   description: 'Изменение параметров сервера/системы',
   ogDescription: 'Изменение параметров сервера/системы'
 })

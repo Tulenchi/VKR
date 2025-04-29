@@ -14,6 +14,9 @@ import type {NetworkProtocol} from '@/models/NetworkProtocol';
 import type {ServerCluster} from '@/models/ServerCluster';
 import type { Software } from '@/models/Software';
 import type { SoftwareType } from '@/models/SoftwareType';
+import type { SystemType } from '@/models/SystemType';
+import type { SystemConnection } from '@/models/SystemConnection';
+
 
 export const testUser: User[] = [
     {
@@ -52,28 +55,34 @@ export const testIpAddressType: IpAddressType[] = [
         identifier: 'internal'
     },
     {
-        identifier: 'internal'
+        identifier: 'external'
     },
 ];
 
 export const testNetworkProtocol: NetworkProtocol[] = [
     {
         network_type: 'HTTP',
-        id_network: 'protocol-1'
+        id_network: 'e97c2b14-0160-4cd1-88e8-22754add46a5',
+        parent_id: null,
+        port: null
     },
     {
         network_type: 'HTTPS',
-        id_network: 'protocol-2'
+        id_network: 'a0cb0f61-f6aa-43cf-8965-fe6f2df60b8e',
+        parent_id: null,
+        port: null
     },
 ];
 
 export const testNetworkPorts: NetworkPort[] = [
     {
+        id_port: 'ffdc508d-54d5-4bcf-b8bf-5729ac89486e',
         port: 80,
         description: 'null',
         id_network: testNetworkProtocol.slice(0)
     },
     {
+        id_port: '49b0c36d-c6a8-432c-ad17-5d3730cb8c56',
         port: 8080,
         description: 'null',
         id_network: testNetworkProtocol.slice(0, 1)
@@ -85,55 +94,72 @@ export const testIpAddresses: IpAddress[] = [
         ip: '10.136.2.40',
         id_ip: 'efae8aa7-a1e3-4eee-b140-db6debb44856',
         version: 'IpV4',
-        description: 'null',
-        port: testNetworkPorts[0],
+        DNS: 'A',
+        description: 'Main server IP',
+        id_port: testNetworkPorts[0],
         identifier: testIpAddressType[0]
     },
     {
         ip: 'fd00::1',
         id_ip: '068ccdfc-9ba1-47a6-b1c9-02e67bbb9801',
         version: 'IpV6',
+        DNS: 'AAAA',
         description: 'null',
-        port: testNetworkPorts[1],
+        id_port: testNetworkPorts[1],
         identifier: testIpAddressType[1]
     },
 ];
 
 export const testDomains: DomainName[] = [
     {
+        domain_id: '25c0b6aa-b603-47ba-9a0c-b3e4ca0e2ae2',
         domain_name: 'lk.etu.ru',
-        ip: testIpAddresses.slice(0)
+        id_ip: testIpAddresses.slice(0, 2),
+        description: 'Null'
     },
     {
+        domain_id: 'dee72749-8c7b-4c53-ba70-8dae109b2909',
         domain_name: 'digital.etu.ru',
-        ip: testIpAddresses.slice(0)
+        id_ip: testIpAddresses.slice(0),
+        description: 'Null'
     },
     {
+        domain_id: '5c2c0f8f-62ff-44be-babc-fa9eb293f255',
         domain_name: 'media.etu.ru',
-        ip: testIpAddresses.slice(1)
+        id_ip: testIpAddresses.slice(1),
+        description: 'Null'
     },
     {
+        domain_id: '62d3dbe0-907d-4a50-825b-28ad5d91b0b9',
         domain_name: 'library.etu.ru',
-        ip: testIpAddresses.slice(1)
+        id_ip: testIpAddresses.slice(1),
+        description: 'Null'
     },
     {
+        domain_id: '027361cf-cba0-4349-b352-b0927856a653',
         domain_name: 'vec.etu.ru',
-        ip: testIpAddresses.slice(0, 1)
+        id_ip: testIpAddresses.slice(0, 1),
+        description: 'Null'
     },
     {
+        domain_id: 'd23e3d82-0b1c-45f7-ae87-1bc69bf19c7f',
         domain_name: 'etu.ru',
-        ip: testIpAddresses.slice(0, 1)
+        id_ip: testIpAddresses.slice(0, 1),
+        description: 'Null'
     },
 ];
 
 export const testServerCluster: ServerCluster[] = [
     {
+        cluster_id: 'b940420d-580a-4d6f-95c5-43cd7e6c3b68',
         cluster_name: 'Cluster-1'
     },
     {
+        cluster_id: '6e6a6376-8ea4-4533-949b-ec6c202f3a94',
         cluster_name: 'Cluster-2'
     },
     {
+        cluster_id: '89b3db8b-3ef9-4e4f-876d-5eb78d99e128',
         cluster_name: 'Cluster-3'
     },
 ];
@@ -141,41 +167,45 @@ export const testServerCluster: ServerCluster[] = [
 export const testSoftwareTypes: SoftwareType[] = [
     {
         type_id: '6ba7b810-9dad-11d1-80b4-00c04fd430c8',
-        software_type_name: 'software_1',
-        provider: 'null',
-        documentation: 'null',
-        is_reusable: false
+        software_type_name: 'Web Server',
+        provider: 'Apache',
+        documentation: 'docs.apache.org',
+        is_reusable: true
     },
     {
         type_id: '550e8400-e29b-41d4-a716-446655440000',
-        software_type_name: 'software_2',
-        provider: 'null',
-        documentation: 'null',
+        software_type_name: 'Database',
+        provider: 'Oracle',
+        documentation: 'docs.oracle.com',
         is_reusable: false
-    },
-];
-
-export const testSoftwareVersion: SoftwareVersion[] = [
-    {
-        version_name: '1',
-        type_id: testSoftwareTypes.slice(0)
-    },
-    {
-        version_name: '14.*.*',
-        type_id: testSoftwareTypes.slice(0, 1)
     },
 ];
 
 export const testSoftware: Software[] = [
     {
         software_id: 'e989170c-8508-436d-9c2c-75f82616194e',
-        version_name: testSoftwareVersion[0],
-        description: 'null'
+        software_name: 'Apache HTTPD',
+        description: 'Web server',
+        type_id: testSoftwareTypes[0]
     },
     {
         software_id: '7f471eeb-6b0a-4720-b6b5-2dd482712481',
-        version_name: testSoftwareVersion[1],
-        description: 'null'
+        software_name: 'MySQL',
+        description: 'null',
+        type_id: testSoftwareTypes[1]
+    },
+];
+
+export const testSoftwareVersion: SoftwareVersion[] = [
+    {
+        softwareversion_id: 'e927fbb4-ac00-4a5d-aa49-90b7d81ebd76',
+        version_name: '2.4.41',
+        software_id: testSoftware.slice(0)
+    },
+    {
+        softwareversion_id: '4b7a2412-a48b-496b-8c23-0cba80a52de9',
+        version_name: '14.*.*',
+        software_id: testSoftware.slice(0, 1)
     },
 ];
 
@@ -196,16 +226,16 @@ export const testHardwareMeasurementUnit: HardwareMeasurementUnit[] = [
 
 export const testHardwareType: HardwareType[] = [
     {
-        type_id: 'hardwaretype-1',
+        type_id: 'cpu-type',
         type_name: 'CPU',
-        description: '',
+        description: 'Processor',
         is_reusable: false,
         MU_id: testHardwareMeasurementUnit.slice(0)
     },
     {
-        type_id: 'hardwaretype-2',
+        type_id: 'ram-type',
         type_name: 'RAM',
-        description: 'null',
+        description: 'Memory',
         is_reusable: true,
         MU_id: testHardwareMeasurementUnit.slice(0, 1)
     },
@@ -214,38 +244,66 @@ export const testHardwareType: HardwareType[] = [
 export const testHardware: Hardware[] = [
     {
         hardware_id: '6b93750d-3480-4222-b623-7b9604d059e5',
-        hardware_name: 'hardware-1',
-        value: 8,
+        hardware_name: 'CPU Xeon',
+        value: 2.4,
         description: 'Процессор сервера',
         type_id: testHardwareType[0]
     },
     {
         hardware_id: 'b9538b3b-813a-42bc-9ef6-3f1ac44b28ea',
-        hardware_name: 'hardware-2',
+        hardware_name: 'RAM DDR4',
         value: 32,
         description: 'Оперативная память',
         type_id: testHardwareType[1]
     },
 ];
 
+export const testSystemType: SystemType[] = [
+    {
+        systemtype_id: 'f9545562-4a09-47fd-ba38-cc8c2cd9ac53',
+        type: 'БД'
+    },
+    {
+        systemtype_id: 'faf7a14c-8c6f-46ff-9151-1f94686836e1',
+        type: 'Приложение'
+    },
+    {
+        systemtype_id: '2072e6ed-a236-44fa-b136-dea524fa2e48',
+        type: 'Сетевое хранилище'
+    },
+];
+
+export const testSystemConnection: SystemConnection[] = [
+    {
+        systemconnection_id: '46d0ac36-d03f-4732-98f9-c88b84f91d42',
+        description: 'MySQL connection'
+    },
+    {
+        systemconnection_id: '34713edb-e74c-4edd-9b3e-6050c765d3be',
+        description: 'null'
+    },
+];
+
 export const testSystemName: SystemName[] = [
     {
         system_id: '550e8400-e29b-41d4-a716-446655440000',
-        system_name: 'system_1',
-        type: 'БД',
+        system_name: 'System_1',
         description: 'null',
-        software_id: testSoftware.slice(1),
-        port: testNetworkPorts.slice(0, 1),
-        group_id: testGroups.slice(0)
+        softwareversion_id: testSoftwareVersion.slice(0),
+        id_port: testNetworkPorts.slice(0, 1),
+        group_id: testGroups.slice(0),
+        systemtype_id: testSystemType[0],
+        systemconnection_id: testSystemConnection.slice(0)
     },
     {
         system_id: '6ba7b810-9dad-11d1-80b4-00c04fd430c8',
-        system_name: 'system_2',
-        type: 'Приложение',
+        system_name: 'System_2',
         description: 'null',
-        software_id: testSoftware.slice(1),
-        port: testNetworkPorts.slice(0),
-        group_id: testGroups.slice(1)
+        softwareversion_id: testSoftwareVersion.slice(0),
+        id_port: testNetworkPorts.slice(0),
+        group_id: testGroups.slice(1),
+        systemtype_id: testSystemType[0],
+        systemconnection_id: testSystemConnection.slice(0)
     },
 ];
 
@@ -255,10 +313,10 @@ export const testServerUnits: ServerUnit[] = [
         server_name: 'Личный кабинет',
         server_id: 'personal-account',
         description: 'null',
-        ip: testIpAddresses.slice(0),
-        cluster_name: testServerCluster[0],
+        id_ip: testIpAddresses.slice(0, 1),
+        cluster_id: testServerCluster[0],
         system_id: testSystemName.slice(0),
-        domain_name: testDomains[0],
+        domain_id: testDomains[0],
         group_id: testGroups.slice(0),
         software_id: testSoftware.slice(0),
         hardware_id: testHardware.slice(0, 1)
@@ -268,10 +326,10 @@ export const testServerUnits: ServerUnit[] = [
         server_name: 'Посещаемость',
         server_id: 'attendance',
         description: 'null',
-        ip: testIpAddresses.slice(1),
-        cluster_name: testServerCluster[0],
+        id_ip: testIpAddresses.slice(1),
+        cluster_id: testServerCluster[0],
         system_id: testSystemName.slice(0),
-        domain_name: testDomains[1],
+        domain_id: testDomains[1],
         group_id: testGroups.slice(0),
         software_id: testSoftware.slice(0, 1),
         hardware_id: testHardware.slice(0)
@@ -281,10 +339,10 @@ export const testServerUnits: ServerUnit[] = [
         server_name: 'Медиатека',
         server_id: 'media-library',
         description: 'null',
-        ip: testIpAddresses.slice(0, 1),
-        cluster_name: testServerCluster[1],
+        id_ip: testIpAddresses.slice(0, 1),
+        cluster_id: testServerCluster[1],
         system_id: testSystemName.slice(0),
-        domain_name: testDomains[2],
+        domain_id: testDomains[2],
         group_id: testGroups.slice(0),
         software_id: testSoftware.slice(1),
         hardware_id: testHardware.slice(0, 1)
@@ -294,10 +352,10 @@ export const testServerUnits: ServerUnit[] = [
         server_name: 'Библиотека',
         server_id: 'library',
         description: 'null',
-        ip: testIpAddresses.slice(0, 1),
-        cluster_name: testServerCluster[1],
+        id_ip: testIpAddresses.slice(0, 1),
+        cluster_id: testServerCluster[1],
         system_id: testSystemName.slice(1),
-        domain_name: testDomains[3],
+        domain_id: testDomains[3],
         group_id: testGroups.slice(1),
         software_id: testSoftware.slice(0, 1),
         hardware_id: testHardware.slice(1)
@@ -307,10 +365,10 @@ export const testServerUnits: ServerUnit[] = [
         server_name: 'Moodle',
         server_id: 'moodle',
         description: 'null',
-        ip: testIpAddresses.slice(0),
-        cluster_name: testServerCluster[2],
+        id_ip: testIpAddresses.slice(0),
+        cluster_id: testServerCluster[2],
         system_id: testSystemName.slice(1),
-        domain_name: testDomains[4],
+        domain_id: testDomains[4],
         group_id: testGroups.slice(1),
         software_id: testSoftware.slice(0),
         hardware_id: testHardware.slice(0)
@@ -320,10 +378,10 @@ export const testServerUnits: ServerUnit[] = [
         server_name: 'Лэти',
         server_id: 'leti',
         description: 'null',
-        ip: testIpAddresses.slice(1),
-        cluster_name: testServerCluster[2],
+        id_ip: testIpAddresses.slice(1),
+        cluster_id: testServerCluster[2],
         system_id: testSystemName.slice(1),
-        domain_name: testDomains[5],
+        domain_id: testDomains[5],
         group_id: testGroups.slice(0, 1),
         software_id: testSoftware.slice(0, 1),
         hardware_id: testHardware.slice(0, 1)
