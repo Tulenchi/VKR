@@ -75,12 +75,6 @@
     </div>
   </main>
 
-  <div class="delete">
-    <button class="btn btn-xl btn-square shadow-md bg-neutral-50 text-neutral-50-content hover:bg-neutral-100 hover:text-neutral-50-content" @click="showPopup">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6L20 6M6 6l0 15M17 6l0 15M6 21L17 21M8 2L15 2" /></svg>
-    </button>
-  </div>
-
 </template>
 
 <script lang="ts" setup>
@@ -118,11 +112,3 @@ useSeoMeta({
   ogDescription: 'Изменение параметров сервера/системы'
 })
 </script>
-
-<style lang="css" scoped>
-.delete{
-  position: fixed;
-  bottom: 20px;
-  right: 15px;
-}
-</style>

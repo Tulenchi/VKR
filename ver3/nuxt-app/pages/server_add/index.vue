@@ -29,6 +29,14 @@
     <div class="card bg-neutral text-neutral-content shadow-xl mb-3">
       <div class="card-body">
 
+        <!-- Сервер -->
+        <div class="mb-2">
+          <div class="flex items-center justify-between mb-2">
+            <h3 class="text-xl font-semibold">Имя сервера</h3>
+            <input type="text" placeholder="Введите текст" class="input input-neutral input-base-100" />
+          </div>
+        </div>
+
         <!-- Кластер -->
         <div class="mb-2">
           <div class="flex items-center justify-between mb-2">

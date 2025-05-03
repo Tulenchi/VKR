@@ -316,6 +316,13 @@
       </div>
     </div>
   </div>
+
+  <div class="delete">
+    <button class="btn btn-xl btn-square bg-neutral-50 text-neutral-50-content shadow-md hover:bg-neutral-100 hover:text-neutral-50-content" @click="showPopup">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6L20 6M6 6l0 15M17 6l0 15M6 21L17 21M8 2L15 2" /></svg>
+    </button>
+  </div>
+
 </template>
 
 <script setup>
@@ -355,3 +362,11 @@ useSeoMeta({
   ogDescription: `Подробная информация о сервере "${server.value.server_name}"`
 })
 </script>
+
+<style lang="css" scoped>
+.delete{
+  position: fixed;
+  bottom: 20px;
+  right: 15px;
+}
+</style>

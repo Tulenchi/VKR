@@ -599,7 +599,7 @@ const initNetwork = () => {
       enabled: true,
       solver: 'forceAtlas2Based', // Более эффективный алгоритм
       forceAtlas2Based: {
-        gravitationalConstant: -100,
+        gravitationalConstant: -110,
         centralGravity: 0.01,
         springLength: 200,
         springConstant: 0.05,
@@ -696,11 +696,6 @@ const initNetwork = () => {
           easingFunction: 'easeInOutQuad'
         },
         padding: 100           // Отступ от краев (в пикселях)
-      });
-
-      networkInstance.value.moveTo({
-        position: { x: 0, y: 0 }, // Центрирование
-        scale: 0.9,            // Масштаб 90%
       });
     });
 

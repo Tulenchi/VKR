@@ -32,10 +32,10 @@
       <div class="card-body">
 
         <!-- Название системы -->
-        <div class="mb-2">
+        <div class="mb-2 ">
           <div class="flex items-center justify-between mb-2">
             <h3 class="text-xl font-semibold">Название</h3>
-            <span class="w-auto min-w-80 px-5 py-2 truncate bg-base-100 text-base-content flex items-center justify-center rounded-sm font-semibold">SystemName</span>
+            <span class="w-auto px-5 py-2 truncate bg-base-100 text-base-content flex items-center justify-center rounded-sm font-semibold sm:min-w-60 md:min-w-80">SystemName</span>
           </div>
         </div>
 
@@ -245,11 +245,11 @@
     </div>
   </div>
 
-  <div class="add">
-    <div class="tooltip tooltip-primary tooltip-left" data-tip="Добавление системы">
-      <NuxtLink :to="{ name: 'system_add' }">
-        <button class="btn btn-xl btn-square bg-neutral-50 text-neutral-50-content shadow-md font-semibold text-3xl hover:bg-neutral-100 hover:text-neutral-50-content"><span class="mb-1">+</span></button>
-      </NuxtLink>
+  <div class="delete">
+    <div class="tooltip tooltip-primary tooltip-left" data-tip="Удаление системы">
+        <button class="btn btn-xl btn-square bg-neutral-50 text-neutral-50-content shadow-md hover:bg-neutral-100 hover:text-neutral-50-content" @click="showPopup">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6L20 6M6 6l0 15M17 6l0 15M6 21L17 21M8 2L15 2" /></svg>
+        </button>
     </div>
   </div>
 
@@ -323,7 +323,7 @@ useSeoMeta({
 </script>
 
 <style lang="css" scoped>
-.add{
+.delete{
   position: fixed;
   bottom: 20px;
   right: 15px;

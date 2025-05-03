@@ -48,10 +48,24 @@
     </main>
 
   <div class="add">
-    <div class="tooltip tooltip-primary tooltip-left" data-tip="Добавление сервера">
-      <NuxtLink :to="{ name: 'server_add' }">
-        <button class="btn btn-xl btn-square bg-neutral text-neutral-50-content shadow-md font-semibold text-3xl hover:bg-neutral-50 hover:text-neutral-50-content"><span class="mb-1">+</span></button>
-      </NuxtLink>
+    <div class="dropdown dropdown-top dropdown-end dropdown-hover">
+      <button class="btn btn-neutral btn-circle btn-xl shadow-lg">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+        </svg>
+      </button>
+      <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow-2xl bg-neutral-50 text-neutral-content rounded-box w-56 space-y-2">
+        <li>
+          <NuxtLink :to="{ name: 'server_add' }" class="justify-between">
+            Добавить сервер
+           </NuxtLink>
+        </li>
+        <li>
+          <NuxtLink :to="{ name: 'system_add' }" class="justify-between">
+            Добавить систему
+           </NuxtLink>
+        </li>
+      </ul>
     </div>
   </div>
 
@@ -78,5 +92,22 @@ store.fetchServers();
   position: fixed;
   bottom: 20px;
   right: 15px;
+}
+
+/* Стили для выпадающего меню */
+.dropdown-content {
+  transform-origin: bottom right;
+  animation: scaleIn 0.2s ease-out;
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 </style>
