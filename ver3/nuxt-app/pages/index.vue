@@ -1,7 +1,7 @@
 <template>
   <div class="navbar bg-primary shadow-sm">
     <div class="navbar-start">
-      <NuxtLink to="/map_servers">
+      <NuxtLink :to="{ name: 'map_servers' }">
         <button class="btn btn-ghost btn-secondary h-12 w-12 ">
           <span class="text-primary-content">
             <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -49,7 +49,9 @@
 
   <div class="add">
     <div class="tooltip tooltip-primary tooltip-left" data-tip="Добавление сервера">
-      <button class="btn btn-xl btn-square bg-neutral text-neutral-50-content shadow-md font-semibold text-3xl"><span class="mb-1">+</span></button>
+      <NuxtLink :to="{ name: 'server_add' }">
+        <button class="btn btn-xl btn-square bg-neutral text-neutral-50-content shadow-md font-semibold text-3xl hover:bg-neutral-50 hover:text-neutral-50-content"><span class="mb-1">+</span></button>
+      </NuxtLink>
     </div>
   </div>
 

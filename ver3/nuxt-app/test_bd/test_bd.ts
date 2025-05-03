@@ -16,7 +16,8 @@ import type { Software } from '@/models/Software';
 import type { SoftwareType } from '@/models/SoftwareType';
 import type { SystemType } from '@/models/SystemType';
 import type { SystemConnection } from '@/models/SystemConnection';
-
+import type { DNS } from '@/models/DNS';
+import type { DNSRecord } from '@/models/DNSRecord';
 
 export const testUser: User[] = [
     {
@@ -94,7 +95,6 @@ export const testIpAddresses: IpAddress[] = [
         ip: '10.136.2.40',
         id_ip: 'efae8aa7-a1e3-4eee-b140-db6debb44856',
         version: 'IpV4',
-        DNS: 'A',
         description: 'Main server IP',
         id_port: testNetworkPorts[0],
         identifier: testIpAddressType[0]
@@ -103,10 +103,35 @@ export const testIpAddresses: IpAddress[] = [
         ip: 'fd00::1',
         id_ip: '068ccdfc-9ba1-47a6-b1c9-02e67bbb9801',
         version: 'IpV6',
-        DNS: 'AAAA',
         description: 'null',
         id_port: testNetworkPorts[1],
         identifier: testIpAddressType[1]
+    },
+];
+
+export const testDNS: DNS[] = [
+    {
+        dns_id: '7w3eebc99-9c0b-4ef8-bb6d-6bb9bd380a43',
+        name: 'example1.com',
+    },
+    {
+        dns_id: '8x4eebc99-9c0b-4ef8-bb6d-6bb9bd380a44',
+        name: 'example2.com',
+    },
+];
+
+export const testDNSRecord: DNSRecord[] = [
+    {
+        dnsr_id: '9y5eebc99-9c0b-4ef8-bb6d-6bb9bd380a45',
+        dns_id: testDNS.slice(0),
+        type: 'A',
+        value: '192.168.1.1'
+    },
+    {
+        dnsr_id: '0z6eebc99-9c0b-4ef8-bb6d-6bb9bd380a46',
+        dns_id: testDNS.slice(0, 1),
+        type: 'AAAA',
+        value: '2001:db8::1'
     },
 ];
 
@@ -115,36 +140,42 @@ export const testDomains: DomainName[] = [
         domain_id: '25c0b6aa-b603-47ba-9a0c-b3e4ca0e2ae2',
         domain_name: 'lk.etu.ru',
         id_ip: testIpAddresses.slice(0, 2),
+        dnsr_id: testDNSRecord[0],
         description: 'Null'
     },
     {
         domain_id: 'dee72749-8c7b-4c53-ba70-8dae109b2909',
         domain_name: 'digital.etu.ru',
         id_ip: testIpAddresses.slice(0),
+        dnsr_id: testDNSRecord[1],
         description: 'Null'
     },
     {
         domain_id: '5c2c0f8f-62ff-44be-babc-fa9eb293f255',
         domain_name: 'media.etu.ru',
         id_ip: testIpAddresses.slice(1),
+        dnsr_id: testDNSRecord[0],
         description: 'Null'
     },
     {
         domain_id: '62d3dbe0-907d-4a50-825b-28ad5d91b0b9',
         domain_name: 'library.etu.ru',
         id_ip: testIpAddresses.slice(1),
+        dnsr_id: testDNSRecord[1],
         description: 'Null'
     },
     {
         domain_id: '027361cf-cba0-4349-b352-b0927856a653',
         domain_name: 'vec.etu.ru',
         id_ip: testIpAddresses.slice(0, 1),
+        dnsr_id: testDNSRecord[0],
         description: 'Null'
     },
     {
         domain_id: 'd23e3d82-0b1c-45f7-ae87-1bc69bf19c7f',
         domain_name: 'etu.ru',
         id_ip: testIpAddresses.slice(0, 1),
+        dnsr_id: testDNSRecord[1],
         description: 'Null'
     },
 ];
@@ -319,7 +350,8 @@ export const testServerUnits: ServerUnit[] = [
         domain_id: testDomains[0],
         group_id: testGroups.slice(0),
         software_id: testSoftware.slice(0),
-        hardware_id: testHardware.slice(0, 1)
+        hardware_id: testHardware.slice(0, 1),
+        dnsr_id: testDNSRecord.slice(0)
     },
     {
         server_type: 'virtual',
@@ -332,7 +364,8 @@ export const testServerUnits: ServerUnit[] = [
         domain_id: testDomains[1],
         group_id: testGroups.slice(0),
         software_id: testSoftware.slice(0, 1),
-        hardware_id: testHardware.slice(0)
+        hardware_id: testHardware.slice(0),
+        dnsr_id: testDNSRecord.slice(0)
     },
     {
         server_type: 'virtual',
@@ -345,7 +378,8 @@ export const testServerUnits: ServerUnit[] = [
         domain_id: testDomains[2],
         group_id: testGroups.slice(0),
         software_id: testSoftware.slice(1),
-        hardware_id: testHardware.slice(0, 1)
+        hardware_id: testHardware.slice(0, 1),
+        dnsr_id: testDNSRecord.slice(1)
     },
     {
         server_type: 'virtual',
@@ -358,7 +392,8 @@ export const testServerUnits: ServerUnit[] = [
         domain_id: testDomains[3],
         group_id: testGroups.slice(1),
         software_id: testSoftware.slice(0, 1),
-        hardware_id: testHardware.slice(1)
+        hardware_id: testHardware.slice(1),
+        dnsr_id: testDNSRecord.slice(1)
     },
     {
         server_type: 'virtual',
@@ -371,7 +406,8 @@ export const testServerUnits: ServerUnit[] = [
         domain_id: testDomains[4],
         group_id: testGroups.slice(1),
         software_id: testSoftware.slice(0),
-        hardware_id: testHardware.slice(0)
+        hardware_id: testHardware.slice(0),
+        dnsr_id: testDNSRecord.slice(0, 1)
     },
     {
         server_type: 'virtual',
@@ -384,6 +420,7 @@ export const testServerUnits: ServerUnit[] = [
         domain_id: testDomains[5],
         group_id: testGroups.slice(0, 1),
         software_id: testSoftware.slice(0, 1),
-        hardware_id: testHardware.slice(0, 1)
+        hardware_id: testHardware.slice(0, 1),
+        dnsr_id: testDNSRecord.slice(0, 1)
     },
 ];

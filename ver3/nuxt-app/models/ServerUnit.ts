@@ -5,6 +5,7 @@ import type {Software} from "~/models/Software";
 import type {SystemName} from "~/models/SystemName";
 import type {DomainName} from "~/models/DomainName";
 import type {Group} from "~/models/Group";
+import type {DNSRecord} from "~/models/DNSRecord";
 type slug = string;
 
 export interface ServerUnit {
@@ -19,4 +20,5 @@ export interface ServerUnit {
     group_id: Group[]; // foreign key
     software_id: Software[]; // foreign key
     hardware_id: Hardware[]; // foreign key
+    dnsr_id: DNSRecord[];
 }
