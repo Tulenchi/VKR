@@ -5,5 +5,5 @@ export interface Software {
     software_id: uuid;
     software_name: string;
     description: string;
-    type_id: SoftwareType;
+    softwaretype_id: SoftwareType;
 }

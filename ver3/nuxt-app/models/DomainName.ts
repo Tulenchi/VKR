@@ -1,11 +1,13 @@
-import type {IpAddress} from "~/models/IpAddress";
+import type {server_domain} from "~/models/server_domain";
 import type {DNSRecord} from "~/models/DNSRecord";
+import type {domain_ip} from "~/models/domain_ip";
 type uuid = string;
 
 export interface DomainName {
     domain_id: uuid;
     domain_name: string;
-    id_ip: IpAddress[];
-    dnsr_id: DNSRecord;
+    dnsr_id: DNSRecord[];
     description: string;
+    server_domain: server_domain;
+    domain_ip: domain_ip;
 }

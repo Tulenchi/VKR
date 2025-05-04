@@ -1,11 +1,11 @@
 import type {ServerCluster} from "~/models/ServerCluster";
 import type {IpAddress} from "~/models/IpAddress";
-import type {Hardware} from "~/models/Hardware";
-import type {Software} from "~/models/Software";
+import type {NetworkPort} from "~/models/NetworkPort";
 import type {SystemName} from "~/models/SystemName";
-import type {DomainName} from "~/models/DomainName";
-import type {Group} from "~/models/Group";
-import type {DNSRecord} from "~/models/DNSRecord";
+import type {server_domain} from "~/models/server_domain";
+import type {server_DNSRecord} from "~/models/server_DNSRecord";
+import type {server_sversion} from "~/models/server_sversion";
+import type {server_hardware} from "~/models/server_hardware";
 type slug = string;
 
 export interface ServerUnit {
@@ -16,9 +16,9 @@ export interface ServerUnit {
     id_ip: IpAddress[]; // foreign key
     cluster_id: ServerCluster; // foreign key
     system_id: SystemName[]; // foreign key
-    domain_id: DomainName; // foreign key
-    group_id: Group[]; // foreign key
-    software_id: Software[]; // foreign key
-    hardware_id: Hardware[]; // foreign key
-    dnsr_id: DNSRecord[];
+    id_port: NetworkPort[]; // foreign key
+    server_domain: server_domain; // foreign key
+    server_DNSRecord: server_DNSRecord;
+    server_sversion: server_sversion;
+    server_hardware: server_hardware;
 }
