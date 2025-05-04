@@ -8,5 +8,4 @@ export interface HardwareMeasurementUnit {
     singular_name: string;
     small_plural_name: string;
     plural_name: string;
-    htype_hMU: htype_hMU;
 }

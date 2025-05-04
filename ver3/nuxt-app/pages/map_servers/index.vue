@@ -38,11 +38,23 @@
               <div>
                 <h4 class="font-semibold">Связанные элементы</h4>
                 <p><strong>Кластер:</strong> {{ selectedServer.cluster_id?.cluster_name }}</p>
-                <p><strong>Домен:</strong> {{ selectedServer.domain_id?.domain_name }}</p>
-                <p><strong>Группа: </strong>
-                  <span v-for="(group, index) in selectedServer.group_id" :key="group.group_id">
-                    {{ group.group_name }}{{ index < selectedServer.group_id.length - 1 ? ', ' : '' }}
+                <p><strong>Домен:</strong> <span v-if="selectedServer.domain_id?.length">
+                    <span v-for="(domain, index) in selectedServer.domain_id" :key="domain.domain_id">
+                      {{ domain.domain_name }}{{ index < selectedServer.domain_id.length - 1 ? ', ' : '' }}
+                    </span>
                   </span>
+                  <span v-else>нет</span>
+                </p>
+                <p><strong>Группа: </strong>
+                  <span v-if="selectedServer.group_id.length <= 3">
+                    <span v-for="(group, index) in selectedServer.group_id" :key="group.group_id">
+                      {{ group.group_name }}{{ index < selectedServer.group_id.length - 1 ? ', ' : '' }}
+                    </span>
+                  </span>
+                  <span v-else>
+                    <span v-for="(group, index) in selectedServer.group_id.slice(0, 3)" :key="group.group_id">
+                      {{ group.group_name }}{{ index < 2 ? ', ' : '' }}
+                    </span> ... </span>
                 </p>
               </div>
             </div>
@@ -67,6 +79,7 @@
               <a class="tab tab-lifted" :class="{ 'tab-active': activeTab === 'ports' }" @click="activeTab = 'ports'">Порты</a>
               <a class="tab tab-lifted" :class="{ 'tab-active': activeTab === 'software' }" @click="activeTab = 'software'">ПО</a>
               <a class="tab tab-lifted" :class="{ 'tab-active': activeTab === 'hardware' }" @click="activeTab = 'hardware'">Железо</a>
+              <a class="tab tab-lifted" :class="{ 'tab-active': activeTab === 'domains' }" @click="activeTab = 'domains'">Домены</a>
             </div>
 
             <div v-if="activeTab === 'ip'" class="overflow-x-auto">
@@ -83,7 +96,7 @@
                 <tr v-for="ip in selectedServer.id_ip" :key="ip.id_ip">
                   <td>{{ ip.ip }}</td>
                   <td>{{ ip.version }}</td>
-                  <td>{{ ip.identifier?.identifier }}</td>
+                  <td>{{ ip.id_type?.name }}</td>
                   <td>{{ ip.description || 'нет' }}</td>
                 </tr>
                 </tbody>
@@ -124,14 +137,11 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="software in selectedServer.software_id" :key="software.software_id">
-                  <td>{{ software.software_name }}</td>
-                  <td>
-                      <span v-for="version in software.type_id" :key="version.type_id">
-                        {{ version.software_type_name }}
-                      </span>
-                  </td>
-                  <td>{{ software.description || 'нет' }}</td>
+                <tr v-for="softwarev in selectedServer.sversion_id" :key="softwarev.softwareversion_id">
+                  <td>{{ softwarev.software_id.software_name }}</td>
+                  <td>{{ softwarev.version_name }}</td>
+                  <td>{{ softwarev.software_id.softwaretype_id. software_type_name }}</td>
+                  <td>{{ softwarev.software_id.description || 'нет' }}</td>
                 </tr>
                 </tbody>
               </table>
@@ -160,6 +170,30 @@
                 </tbody>
               </table>
             </div>
+
+            <div v-if="activeTab === 'domains'" class="overflow-x-auto">
+              <table class="table table-zebra">
+                <thead>
+                <tr>
+                  <th>Домен</th>
+                  <th>DNS записи</th>
+                  <th>Описание</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="domain in selectedServer.domain_id" :key="domain.domain_id">
+                  <td>{{ domain.domain_name }}</td>
+                  <td>
+                    <div v-for="dns in domain.dnsr_id" :key="dns.dnsr_id" class="mb-1 last:mb-0">
+                      <span class="font-semibold">{{ dns.type }}:</span> {{ dns.value }}
+                    </div>
+                  </td>
+                  <td>{{ domain.description || 'нет' }}</td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+
           </div>
 
           <!-- Детали кластера -->
@@ -230,6 +264,7 @@
                     {{ dns.type }}: {{ dns.value }}
                   </li>
                 </ul>
+                <p class="mt-2"><strong>Описание:</strong> {{ selectedDomain?.description || 'нет' }}</p>
               </div>
               <div>
                 <h4 class="font-semibold">Связанные серверы</h4>
@@ -244,7 +279,7 @@
 
           <!-- Кнопки закрытия -->
           <div class="modal-action">
-            <button class="btn" @click="closeModal">Закрыть</button>
+            <button class="btn bg-neutral" @click="closeModal">Закрыть</button>
             <NuxtLink
                 v-if="selectedNode.group === 'server'"
                 :to="{ name: 'information_server-id', params: { id: selectedNode.id } }"
@@ -299,9 +334,17 @@ const selectedSystem = computed(() => {
 
 const selectedDomain = computed(() => {
   if (!selectedNode.value || selectedNode.value.group !== 'domain') return null;
-  return serverStore.servers.find(s =>
-      s.domain_id?.domain_id === selectedNode.value.id
-  )?.domain_id;
+
+  for (const server of serverStore.servers) {
+    if (server.domain_id) {
+      const foundDomain = Array.isArray(server.domain_id)
+          ? server.domain_id.find(d => d.domain_id === selectedNode.value.id)
+          : server.domain_id.domain_id === selectedNode.value.id ? server.domain_id : null;
+
+      if (foundDomain) return foundDomain;
+    }
+  }
+  return null;
 });
 
 const serversInCluster = computed(() => {
@@ -320,9 +363,16 @@ const serversInSystem = computed(() => {
 
 const serversForDomain = computed(() => {
   if (!selectedNode.value || selectedNode.value.group !== 'domain') return [];
-  return serverStore.servers.filter(s =>
-      s.domain_id?.domain_id === selectedNode.value.id
-  );
+
+  return serverStore.servers.filter(server => {
+    if (!server.domain_id) return false;
+
+    if (Array.isArray(server.domain_id)) {
+      return server.domain_id.some(d => d.domain_id === selectedNode.value.id);
+    } else {
+      return server.domain_id.domain_id === selectedNode.value.id;
+    }
+  });
 });
 
 const selectedGroup = computed(() => {
@@ -545,28 +595,32 @@ const initNetwork = () => {
 
     // Связи сервера с доменом
     if (server.domain_id) {
-      if (!nodes.get(server.domain_id.domain_id)) {
-        nodes.add({
-          id: server.domain_id.domain_id,
-          label: server.domain_id.domain_name,
-          group: 'domain',
-          shape: 'ellipse',
-          color: {
-            background: '#5674a8',
-            border: '#3b4f73',
-            highlight: {
-              background: '#7996c7',
-              border: '#465775'
+      const domains = Array.isArray(server.domain_id) ? server.domain_id : [server.domain_id];
+
+      domains.forEach(domain => {
+        if (!nodes.get(domain.domain_id)) {
+          nodes.add({
+            id: domain.domain_id,
+            label: domain.domain_name,
+            group: 'domain',
+            shape: 'ellipse',
+            color: {
+              background: '#5674a8',
+              border: '#3b4f73',
+              highlight: {
+                background: '#7996c7',
+                border: '#465775'
+              }
             }
-          }
+          });
+        }
+        edges.add({
+          from: server.server_id,
+          to: domain.domain_id,
+          arrows: 'to',
+          label: 'домен',
+          color: { color: '#795548' }
         });
-      }
-      edges.add({
-        from: server.server_id,
-        to: server.domain_id.domain_id,
-        arrows: 'to',
-        label: 'домен',
-        color: { color: '#795548' }
       });
     }
   });

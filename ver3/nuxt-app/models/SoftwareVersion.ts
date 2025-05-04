@@ -7,6 +7,4 @@ export interface SoftwareVersion {
     softwareversion_id: uuid;
     version_name: string;
     software_id: Software;
-    server_sversion: server_sversion;
-    system_sversion: system_sversion;
 }

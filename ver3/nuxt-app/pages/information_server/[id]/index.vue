@@ -2,7 +2,7 @@
   <div class="navbar bg-primary shadow-xl sticky top-0 z-40">
     <div class="navbar-start">
       <NuxtLink :to="{ name: 'index' }">
-        <button class="btn btn-ghost btn-secondary h-12 w-12 mr-1 hover:bg-neutral-100 hover:text-neutral-50-content">
+        <button class="btn btn-ghost btn-secondary h-12 w-12 mr-1 hover:bg-secondary hover:text-neutral-50-content">
           <span class="text-primary-content">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="34" height="34" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none">
               <path d="M12 3L2 12h3v8h5v-6h4v6h5v-8h3L12 3z" />
@@ -10,8 +10,8 @@
           </span>
         </button>
       </NuxtLink>
-      <NuxtLink :to="{ name: 'map_server'}">
-        <button class="btn btn-ghost btn-secondary h-12 w-12 hover:bg-neutral-100 hover:text-neutral-50-content">
+      <NuxtLink :to="{ name: 'map_server-id', params: { id: serverId }}">
+        <button class="btn btn-ghost btn-secondary h-12 w-12 hover:bg-secondary hover:text-neutral-50-content">
           <span class="text-primary-content">
             <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon>
@@ -111,7 +111,7 @@
               <tr v-for="(ip, index) in server.id_ip" :key="index">
                 <td>{{ ip.ip }}</td>
                 <td>{{ ip.version }}</td>
-                <td>{{ ip.identifier.identifier }}</td>
+                <td>{{ ip.id_type.name }}</td>
                 <td>{{ ip.description }}</td>
                 <td class="text-right">
                   <div class="flex justify-end space-x-1">
@@ -198,11 +198,11 @@
               </tr>
               </thead>
               <tbody>
-              <tr v-for="(dnsr, index) in server.dnsr_id">
-                <td>{{ dnsr.type }}</td>
-                <td>{{ dnsr.value }}</td>
-                <td>{{ server.domain_id.domain_name }}</td>
-                <td>{{ server.domain_id.description }}</td>
+              <tr v-for="(domain, index) in server.domain_id">
+                <td v-html="domain.dnsr_id.map(np => np.type).join('<br>')"></td>
+                <td v-html="domain.dnsr_id.map(np => np.value).join('<br>')"></td>
+                <td>{{ domain.domain_name }}</td>
+                <td>{{ domain.description }}</td>
                 <td class="text-right">
                   <div class="flex justify-end space-x-1">
                     <button class="btn btn-sm btn-square bg-neutral-50 text-neutral-50-content hover:bg-neutral-100 hover:text-neutral-50-content">

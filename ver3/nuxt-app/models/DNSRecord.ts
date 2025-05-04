@@ -7,5 +7,4 @@ export interface DNSRecord {
     dns_id: DNS[];
     type: string;
     value: string;
-    server_DNSRecord: server_DNSRecord;
 }

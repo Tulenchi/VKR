@@ -7,5 +7,4 @@ export interface NetworkProtocol {
     id_network: uuid;
     parent_id: uuid | null; // должна быть связь как-бы
     port: int | null;
-    port_protocol: port_protocol;
 }

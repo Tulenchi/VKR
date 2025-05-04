@@ -16,7 +16,7 @@
               </div>
             </div>
             <div class="flex items-center gap-2">
-              <a :href="'https://' + domain" target="_blank" class="link">{{ domain }}</a>
+              <a :href="'https://' + domain[0].domain_name" target="_blank" class="link">{{ domain[0].domain_name }}</a>
             </div>
           </div>
         </div>
@@ -30,7 +30,7 @@
 defineProps({
   title: String,
   ip: Array,
-  domain: String,
+  domain: Array,
   serverId: String
 })
 </script>

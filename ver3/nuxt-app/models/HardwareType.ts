@@ -1,4 +1,5 @@
 import type {htype_hMU} from "~/models/htype_hMU";
+import type {HardwareMeasurementUnit} from "~/models/HardwareMeasurementUnit";
 type slug = string;
 type uuid = string;
 
@@ -8,5 +9,5 @@ export interface HardwareType {
     type_name: string;
     description: string;
     is_reusable: boolean;
-    htype_hMU: htype_hMU;
+    hardwareMU_id: HardwareMeasurementUnit[];
 }

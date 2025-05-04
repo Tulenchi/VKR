@@ -11,5 +11,4 @@ export interface IpAddress {
     description: string;
     id_port: NetworkPort; // foreign key
     id_type: IpAddressType; // foreign key
-    domain_ip: domain_ip;
 }

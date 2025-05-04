@@ -9,5 +9,4 @@ export interface Hardware {
     value: double;
     description: string;
     hardwaretype_id: HardwareType;
-    server_hardware: server_hardware;
 }

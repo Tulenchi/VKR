@@ -124,7 +124,7 @@ watch(selectedIp, (newIp) => {
   if (newIp) {
     form.value.ip = newIp.ip;
     form.value.version = newIp.version;
-    form.value.type = newIp.identifier.identifier;
+    form.value.type = newIp.id_type.name;
     form.value.description = newIp.description;
   }
 }, { immediate: true });
