@@ -57,12 +57,12 @@
         <div class="mb-2">
           <div class="flex items-center justify-between mb-2">
             <h3 class="text-xl font-semibold">Кластер</h3>
-            <select class="select select-neutral" v-model="selectedCluster">
-              <option disabled selected>Выберите кластер</option>
-              <option v-for="cluster in clusters" :key="cluster" :value="cluster">
+            <input type="text" class="input input-neutral" placeholder="Название кластера" list="clusters" :value="server.cluster_id.cluster_name" />
+            <datalist id="clusters">
+              <option v-for="cluster in allClusters" :key="cluster" :value="cluster">
                 {{ cluster }}
               </option>
-            </select>
+            </datalist>
           </div>
         </div>
 
@@ -70,7 +70,36 @@
         <div class="mb-4">
           <div class="flex items-center justify-between mb-4">
             <h3 class="text-xl font-semibold">Группы</h3>
-            <button class="btn btn-square bg-neutral-50 font-semibold text-2xl text-neutral-50-content mr-3 hover:bg-neutral-100 hover:text-neutral-50-content"><span class="mb-1">+</span></button>
+            <button class="btn btn-square bg-neutral-50 font-semibold text-2xl text-neutral-50-content mr-3 hover:bg-neutral-100 hover:text-neutral-50-content" onclick="my_modal_1.showModal()"><span class="mb-1">+</span></button>
+            <dialog id="my_modal_1" class="modal">
+              <div class="modal-box">
+                <h3 class="text-lg font-bold mb-8 text-center">Добавление группы</h3>
+                <div class="flex justify-center mb-8">
+                  <input
+                      type="text"
+                      class="input input-neutral w-full max-w-xs"
+                      placeholder="Название группы"
+                      list="availableGroups"
+                  />
+                  <datalist id="availableGroups">
+                    <option
+                        v-for="group in availableGroups"
+                        :key="group.group_id"
+                        :value="group.group_name"
+                    >
+                      {{ group.group_name }}
+                    </option>
+                  </datalist>
+                </div>
+                <div class="modal-action">
+                  <button class="btn bg-neutral-50 hover:bg-neutral-100 hover:text-neutral-50-content">Сохранить</button>
+                  <form method="dialog">
+                    <!-- if there is a button in form, it will close the modal -->
+                    <button class="btn">Отмена</button>
+                  </form>
+                </div>
+              </div>
+            </dialog>
           </div>
           <div class="space-y-4">
             <div
@@ -154,18 +183,28 @@
               </tr>
               </thead>
               <tbody>
-              <tr v-for="(ip, index) in server.id_ip" :key="index">
-                <td>{{ ip.id_port.id_network.map(np => np.network_type).join(', ') }}</td>
-                <td>{{ ip.id_port.port }}</td>
-                <td>{{ ip.ip }}</td>
-                <td>{{ ip.id_port.description }}</td>
+              <template v-for="(ip, index) in server.id_ip" :key="ip.id_ip">
+                <tr v-for="(protocol, portIndex) in ip.id_port.id_network" :key="protocol.id_network">
+                  <td>{{ protocol.network_type }}</td>
+                  <td>{{ ip.id_port.port }}</td>
+                  <td>{{ ip.ip }}</td>
+                  <td>{{ ip.id_port.description }}</td>
                 <td class="text-right">
                   <div class="flex justify-end space-x-1">
-                    <button class="btn btn-sm btn-square bg-neutral-50 text-neutral-50-content hover:bg-neutral-100 hover:text-neutral-50-content">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                      </svg>
-                    </button>
+                    <NuxtLink :to="{ name: 'information_server-id-tables-ports-rowId', params: { id: serverId, rowId: ip.id_port.id_port },
+                     query: {
+                        protocol: protocol.network_type,
+                        port: ip.id_port.port,
+                        ip: ip.ip,
+                        description: ip.id_port.description
+                      }
+                    }" >
+                      <button class="btn btn-sm btn-square bg-neutral-50 text-neutral-50-content hover:bg-neutral-100 hover:text-neutral-50-content">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                        </svg>
+                      </button>
+                    </NuxtLink>
                     <button class="btn btn-sm btn-square bg-neutral-50 text-neutral-50-content hover:bg-neutral-100 hover:text-neutral-50-content">
                       <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -174,6 +213,7 @@
                   </div>
                 </td>
               </tr>
+              </template>
               </tbody>
             </table>
           </div>
@@ -198,18 +238,30 @@
               </tr>
               </thead>
               <tbody>
-              <tr v-for="(domain, index) in server.domain_id">
-                <td v-html="domain.dnsr_id.map(np => np.type).join('<br>')"></td>
-                <td v-html="domain.dnsr_id.map(np => np.value).join('<br>')"></td>
-                <td>{{ domain.domain_name }}</td>
-                <td>{{ domain.description }}</td>
-                <td class="text-right">
+              <template v-for="domain in server.domain_id" :key="domain.domain_id">
+                <tr v-for="(dns, dnsIndex) in domain.dnsr_id" :key="dns.dnsr_id">
+                  <td>{{ dns.type }}</td>
+                  <td>{{ dns.value }}</td>
+                  <td>{{ domain.domain_name }}</td>
+                  <td>{{ domain.description }}</td>
+                  <td class="text-right">
                   <div class="flex justify-end space-x-1">
-                    <button class="btn btn-sm btn-square bg-neutral-50 text-neutral-50-content hover:bg-neutral-100 hover:text-neutral-50-content">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                      </svg>
-                    </button>
+                    <NuxtLink :to="{
+                        name: 'information_server-id-tables-domains-rowId',
+                        params: { id: serverId, rowId: domain.domain_id },
+                        query: {
+                          dns: dns.type,
+                          value: dns.value,
+                          domain: domain.domain_name,
+                          description: domain.description
+                        }
+                      }">
+                      <button class="btn btn-sm btn-square bg-neutral-50 text-neutral-50-content hover:bg-neutral-100 hover:text-neutral-50-content">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                        </svg>
+                      </button>
+                    </NuxtLink>
                     <button class="btn btn-sm btn-square bg-neutral-50 text-neutral-50-content hover:bg-neutral-100 hover:text-neutral-50-content">
                       <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -218,6 +270,7 @@
                   </div>
                 </td>
               </tr>
+              </template>
               </tbody>
             </table>
           </div>
@@ -235,23 +288,36 @@
             <table class="table">
               <thead>
               <tr>
+                <th>Name</th>
                 <th>Type</th>
                 <th>Value</th>
                 <th>Description</th>
               </tr>
               </thead>
               <tbody>
-              <tr v-for="(item, index) in configurations" :key="index">
-                <td>{{ item.type }}</td>
-                <td>{{ item.value }}</td>
-                <td>{{ item.description }}</td>
+              <tr v-for="(hardware, index) in server.hardware_id" :key="index">
+                <td>{{ hardware.hardware_name }}</td>
+                <td>{{ hardware.hardwaretype_id.type_name }}</td>
+                <td>{{ hardware.value }}</td>
+                <td>{{ hardware.description }}</td>
                 <td class="text-right">
                   <div class="flex justify-end space-x-1">
-                    <button class="btn btn-sm btn-square bg-neutral-50 text-neutral-50-content hover:bg-neutral-100 hover:text-neutral-50-content">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                      </svg>
-                    </button>
+                    <NuxtLink :to="{
+                        name: 'information_server-id-tables-configuration-rowId',
+                        params: { id: serverId, rowId: hardware.hardware_id },
+                        query: {
+                          name: hardware.hardware_name,
+                          type: hardware.hardwaretype_id.type_name,
+                          value: hardware.value,
+                          description: hardware.description
+                        }
+                      }">
+                      <button class="btn btn-sm btn-square bg-neutral-50 text-neutral-50-content hover:bg-neutral-100 hover:text-neutral-50-content">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                        </svg>
+                      </button>
+                    </NuxtLink>
                     <button class="btn btn-sm btn-square bg-neutral-50 text-neutral-50-content hover:bg-neutral-100 hover:text-neutral-50-content">
                       <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -287,20 +353,36 @@
             </tr>
             </thead>
             <tbody>
-            <tr v-for="(item, index) in applications" :key="index">
-              <td>{{ item.name }}</td>
-              <td>{{ item.version }}</td>
-              <td>{{ item.type }}</td>
-              <td>{{ item.provider }}</td>
-              <td>{{ item.documentation }}</td>
-              <td>{{ item.description }}</td>
+            <tr v-for="(sversion, index) in server.sversion_id" :key="index">
+              <td>{{ sversion.software_id.software_name }}</td>
+              <td>{{ sversion.version_name }}</td>
+              <td>{{ sversion.software_id.softwaretype_id.software_type_name }}</td>
+              <td>{{ sversion.software_id.softwaretype_id.provider }}</td>
+              <td>{{ sversion.software_id.softwaretype_id.documentation }}</td>
+              <td>{{ sversion.software_id.description }}</td>
               <td class="text-right">
                 <div class="flex justify-end space-x-1">
-                  <button class="btn btn-sm btn-square bg-neutral-50 text-neutral-50-content hover:bg-neutral-100 hover:text-neutral-50-content">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                    </svg>
-                  </button>
+                  <NuxtLink :to="{
+                      name: 'information_server-id-tables-applications-rowId',
+                      params: {
+                        id: serverId,
+                        rowId: sversion.softwareversion_id
+                      },
+                      query: {
+                        name: sversion.software_id.software_name,
+                        version: sversion.version_name,
+                        type: sversion.software_id.softwaretype_id.software_type_name,
+                        provider: sversion.software_id.softwaretype_id.provider,
+                        documentation: sversion.software_id.softwaretype_id.documentation,
+                        description: sversion.software_id.description
+                      }
+                    }">
+                    <button class="btn btn-sm btn-square bg-neutral-50 text-neutral-50-content hover:bg-neutral-100 hover:text-neutral-50-content">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                      </svg>
+                    </button>
+                  </NuxtLink>
                   <button class="btn btn-sm btn-square bg-neutral-50 text-neutral-50-content hover:bg-neutral-100 hover:text-neutral-50-content">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -318,9 +400,11 @@
   </div>
 
   <div class="delete">
-    <button class="btn btn-xl btn-square bg-neutral-50 text-neutral-50-content shadow-md hover:bg-neutral-100 hover:text-neutral-50-content" @click="showPopup">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6L20 6M6 6l0 15M17 6l0 15M6 21L17 21M8 2L15 2" /></svg>
-    </button>
+    <div class="tooltip tooltip-primary tooltip-left" data-tip="Удаление сервера">
+      <button class="btn btn-xl btn-square bg-neutral-50 text-neutral-50-content shadow-md hover:bg-neutral-100 hover:text-neutral-50-content">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6L20 6M6 6l0 15M17 6l0 15M6 21L17 21M8 2L15 2" /></svg>
+      </button>
+    </div>
   </div>
 
 </template>
@@ -336,24 +420,12 @@ const serverStore = useServerStore();
 const serverId = computed(() => route.params.id);
 const server = computed(() => serverStore.getServerById(serverId.value));
 const loading = computed(() => serverStore.loading);
+const allClusters = computed(() => serverStore.getAllClusters);
+const availableGroups = computed(() => serverStore.getAvailableGroups(serverId.value));
 
 watch(serverId, (newId) => {
   serverStore.fetchServerById(newId);
 }, { immediate: true });
-
-// Кластер
-const clusters = ['Кластер №1', 'Кластер №2', 'Кластер №3']
-const selectedCluster = ref(clusters[0])
-
-const configurations = ref([
-  { type: 'If', value: 'If', description: 'Null' },
-  { type: 'If', value: 'If', description: 'Null' }
-])
-
-const applications = ref([
-  { name: 'Postgress', version: '16.1', type: 'ff', provider: 'ff', documentation: 'ff', description: 'Null' },
-  { name: 'ff', version: 'ff', type: 'ff', provider: 'ff', documentation: 'ff', description: 'Null' }
-])
 
 useSeoMeta({
   title: `Информация о сервере "${server.value.server_name}"`,

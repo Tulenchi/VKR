@@ -37,7 +37,6 @@
   <main class="container mx-auto px-4 py-8 max-w-3xl">
     <div class="card bg-neutral text-neutral-content shadow-xl">
       <div class="card-body">
-
         <div class="mb-2">
           <div class="flex items-center justify-between mb-2">
             <h3 class="text-xl font-semibold">Порт</h3>
@@ -47,28 +46,28 @@
         <div class="mb-2">
           <div class="flex items-center justify-between mb-2">
             <h3 class="text-xl font-semibold">Protocol</h3>
-            <input type="text" v-model="form.ip" placeholder="Введите текст" class="input input-neutral input-base-100" />
+            <input type="text" v-model="form.protocol" placeholder="Введите протокол" class="input input-neutral input-base-100" />
           </div>
         </div>
 
         <div class="mb-2">
           <div class="flex items-center justify-between mb-2">
             <h3 class="text-xl font-semibold">Port</h3>
-            <input type="text" v-model="form.version" placeholder="Введите текст" class="input input-neutral input-base-100" />
+            <input type="number" v-model="form.port" placeholder="Введите порт" class="input input-neutral input-base-100" />
           </div>
         </div>
 
         <div class="mb-2">
           <div class="flex items-center justify-between mb-3">
             <h3 class="text-xl font-semibold">IP</h3>
-            <input type="text" v-model="form.type" placeholder="Введите текст" class="input input-neutral input-base-100" />
+            <input type="text" v-model="form.ip" placeholder="Введите IP" class="input input-neutral input-base-100" />
           </div>
         </div>
 
         <div class="mb-2">
           <div class="flex justify-between mb-2">
             <h3 class="text-xl font-semibold">Description</h3>
-            <textarea type="text" v-model="form.description" placeholder="Введите текст" class="textarea textarea-neutral resize-none overflow-hidden" rows="5" @input="autoResizeTextarea" ref="textarea"></textarea>
+            <textarea type="text" v-model="form.description" placeholder="Введите описание" class="textarea textarea-neutral resize-none overflow-hidden" rows="5" @input="autoResizeTextarea" ref="textarea"></textarea>
           </div>
         </div>
       </div>
@@ -86,12 +85,9 @@
 <script lang="ts" setup>
 import {ref, onMounted, computed} from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { useServerStore } from '@/stores/ServerStore';
 
 const route = useRoute();
 const router = useRouter();
-const serverStore = useServerStore();
-const loading = ref(false);
 const textarea = ref<HTMLTextAreaElement | null>(null);
 
 const autoResizeTextarea = () => {
@@ -103,31 +99,23 @@ const autoResizeTextarea = () => {
 
 onMounted(() => {
   autoResizeTextarea();
-});
-
-const serverId = computed(() => Array.isArray(route.params.id) ? route.params.id[0] : route.params.id);
-const server = computed(() => serverStore.getServerById(serverId.value));
-const rowId = computed(() => route.params.rowId);
-
-const selectedIp = computed(() => {
-  return server.value?.ip.find(ip => ip.id_ip === rowId.value);
+  // Заполняем форму данными из query параметров
+  if (route.query) {
+    form.value = {
+      protocol: route.query.protocol as string || '',
+      port: route.query.port as string || '',
+      ip: route.query.ip as string || '',
+      description: route.query.description as string || ''
+    }
+  }
 });
 
 const form = ref({
+  protocol: '',
+  port: '',
   ip: '',
-  version: '',
-  type: '',
   description: ''
 });
-
-watch(selectedIp, (newIp) => {
-  if (newIp) {
-    form.value.ip = newIp.ip;
-    form.value.version = newIp.version;
-    form.value.type = newIp.identifier.identifier;
-    form.value.description = newIp.description;
-  }
-}, { immediate: true });
 
 const goBack = () => {
   router.go(-1)
@@ -135,18 +123,14 @@ const goBack = () => {
 
 const showPopup = () => {
   const confirmation = confirm("Вы уверены, что хотите удалить данный объект?");
-
-  //if (confirmation) {
-  //  noteStore.deleteNote(note.id);
-  //  router.push('/');
-  //}
+  // Логика удаления
 }
 
 useSeoMeta({
   title: 'Изменение порта',
   ogTitle: 'Изменение порта',
-  description: 'Изменение параметров сервера/системы',
-  ogDescription: 'Изменение параметров сервера/системы'
+  description: 'Изменение параметров порта',
+  ogDescription: 'Изменение параметров порта'
 })
 </script>
 

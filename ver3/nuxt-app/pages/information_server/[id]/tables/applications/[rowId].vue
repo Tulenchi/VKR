@@ -44,27 +44,47 @@
           </div>
         </div>
 
+        <!-- Name -->
         <div class="mb-2">
           <div class="flex items-center justify-between mb-2">
             <h3 class="text-xl font-semibold">Name</h3>
-            <input type="text" v-model="form.ip" placeholder="Введите текст" class="input input-neutral input-base-100" />
+            <input v-model="form.name" class="input input-neutral input-base-100" />
           </div>
         </div>
 
+        <!-- Version -->
         <div class="mb-2">
           <div class="flex items-center justify-between mb-2">
             <h3 class="text-xl font-semibold">Version</h3>
-            <input type="text" v-model="form.version" placeholder="Введите текст" class="input input-neutral input-base-100" />
+            <input v-model="form.version" class="input input-neutral input-base-100" />
           </div>
         </div>
 
+        <!-- Type -->
         <div class="mb-2">
-          <div class="flex items-center justify-between mb-3">
+          <div class="flex items-center justify-between mb-2">
             <h3 class="text-xl font-semibold">Type</h3>
-            <input type="text" v-model="form.type" placeholder="Введите текст" class="input input-neutral input-base-100" />
+            <input v-model="form.type" class="input input-neutral input-base-100" />
           </div>
         </div>
 
+        <!-- Provider -->
+        <div class="mb-2">
+          <div class="flex items-center justify-between mb-2">
+            <h3 class="text-xl font-semibold">Provider</h3>
+            <input v-model="form.provider" class="input input-neutral input-base-100" />
+          </div>
+        </div>
+
+        <!-- Documentation -->
+        <div class="mb-2">
+          <div class="flex items-center justify-between mb-2">
+            <h3 class="text-xl font-semibold">Documentation</h3>
+            <input v-model="form.documentation" class="input input-neutral input-base-100" />
+          </div>
+        </div>
+
+        <!-- Description -->
         <div class="mb-2">
           <div class="flex justify-between mb-2">
             <h3 class="text-xl font-semibold">Description</h3>
@@ -86,12 +106,9 @@
 <script lang="ts" setup>
 import {ref, onMounted, computed} from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { useServerStore } from '@/stores/ServerStore';
 
 const route = useRoute();
 const router = useRouter();
-const serverStore = useServerStore();
-const loading = ref(false);
 const textarea = ref<HTMLTextAreaElement | null>(null);
 
 const autoResizeTextarea = () => {
@@ -101,33 +118,27 @@ const autoResizeTextarea = () => {
   }
 };
 
-onMounted(() => {
-  autoResizeTextarea();
-});
-
-const serverId = computed(() => Array.isArray(route.params.id) ? route.params.id[0] : route.params.id);
-const server = computed(() => serverStore.getServerById(serverId.value));
-const rowId = computed(() => route.params.rowId);
-
-const selectedIp = computed(() => {
-  return server.value?.ip.find(ip => ip.id_ip === rowId.value);
-});
-
 const form = ref({
-  ip: '',
+  name: '',
   version: '',
   type: '',
+  provider: '',
+  documentation: '',
   description: ''
 });
 
-watch(selectedIp, (newIp) => {
-  if (newIp) {
-    form.value.ip = newIp.ip;
-    form.value.version = newIp.version;
-    form.value.type = newIp.identifier.identifier;
-    form.value.description = newIp.description;
+onMounted(() => {
+  if (route.query) {
+    form.value = {
+      name: route.query.name as string || '',
+      version: route.query.version as string || '',
+      type: route.query.type as string || '',
+      provider: route.query.provider as string || '',
+      documentation: route.query.documentation as string || '',
+      description: route.query.description as string || ''
+    }
   }
-}, { immediate: true });
+});
 
 const goBack = () => {
   router.go(-1)
@@ -135,11 +146,7 @@ const goBack = () => {
 
 const showPopup = () => {
   const confirmation = confirm("Вы уверены, что хотите удалить данный объект?");
-
-  //if (confirmation) {
-  //  noteStore.deleteNote(note.id);
-  //  router.push('/');
-  //}
+  // Логика удаления
 }
 
 useSeoMeta({

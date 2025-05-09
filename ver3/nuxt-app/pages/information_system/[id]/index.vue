@@ -20,7 +20,7 @@
       </NuxtLink>
     </div>
     <div class="navbar-center">
-      <a class="text-2xl text-primary-content">Система</a>
+      <a class="text-2xl text-primary-content">{{ system.system_name }}</a>
     </div>
     <div class="navbar-end text-primary-content">
       <ThemeSwitcher />
@@ -35,7 +35,26 @@
         <div class="mb-2 ">
           <div class="flex items-center justify-between mb-2">
             <h3 class="text-xl font-semibold">Название</h3>
-            <span class="w-auto px-5 py-2 truncate bg-base-100 text-base-content flex items-center justify-center rounded-sm font-semibold sm:min-w-60 md:min-w-80">SystemName</span>
+            <!--<span class="w-auto px-5 py-2 truncate bg-base-100 text-base-content flex items-center justify-center rounded-sm font-semibold sm:min-w-60 md:min-w-80">{{ system.system_name }}</span>-->
+            <div class="join">
+              <div>
+                <label class="input input-neutral join-item sm:min-w-50 md:min-w-70 focus:outline-none border-none focus:border-none">
+                  <input
+                      v-model="editableSystemName"
+                      placeholder="Название системы"
+                      required
+                      class="focus:outline-none focus:ring-0 border-none focus:border-none"
+                  />
+                </label>
+              </div>
+              <button class="btn btn-square bg-neutral-50 text-neutral-50-content join-item hover:bg-neutral-100 hover:text-neutral-50-content">
+                <span class="text-neutral-50-content">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="22" height="22">
+                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" fill="currentColor"/>
+                </svg>
+              </span>
+              </button>
+            </div>
           </div>
         </div>
 
@@ -43,7 +62,7 @@
         <div class="mb-2">
           <div class="flex items-center justify-between mb-2">
             <h3 class="text-xl font-semibold">Тип</h3>
-            <select class="select select-neutral" v-model="selectedType">
+            <select class="select select-neutral" v-model="system.systemtype_id.type">
               <option disabled selected>Выберите тип</option>
               <option v-for="Type in types" :key="Type" :value="Type">
                 {{ Type }}
@@ -52,11 +71,62 @@
           </div>
         </div>
 
+        <!-- Группа -->
+        <div class="mb-4">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-xl font-semibold">Группы</h3>
+            <button class="btn btn-square bg-neutral-50 font-semibold text-2xl text-neutral-50-content mr-3 hover:bg-neutral-100 hover:text-neutral-50-content" onclick="my_modal_1.showModal()"><span class="mb-1">+</span></button>
+            <dialog id="my_modal_1" class="modal">
+              <div class="modal-box">
+                <h3 class="text-lg font-bold mb-8 text-center">Добавление группы</h3>
+                <div class="flex justify-center mb-8">
+                  <input
+                      type="text"
+                      class="input input-neutral w-full max-w-xs"
+                      placeholder="Название группы"
+                      list="availableGroupsSystem"
+                  />
+                  <datalist id="availableGroupsSystem">
+                    <option
+                        v-for="group in availableGroupsSystem"
+                        :key="group.group_id"
+                        :value="group.group_name"
+                    >
+                      {{ group.group_name }}
+                    </option>
+                  </datalist>
+                </div>
+                <div class="modal-action">
+                  <button class="btn bg-neutral-50 hover:bg-neutral-100 hover:text-neutral-50-content">Сохранить</button>
+                  <form method="dialog">
+                    <!-- if there is a button in form, it will close the modal -->
+                    <button class="btn">Отмена</button>
+                  </form>
+                </div>
+              </div>
+            </dialog>
+          </div>
+          <div class="space-y-4">
+            <div
+                v-for="group in system?.group_id"
+                :key="group.group_id"
+                class="flex items-center justify-between"
+            >
+              <span class="text-lg">{{ group.group_name }}</span>
+              <button class="btn btn-md btn-square bg-neutral-50 text-neutral-50-content mr-3 hover:bg-neutral-100 hover:text-neutral-50-content">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
         <!-- Операционные системы -->
         <div class="mb-6">
           <div class="flex items-center justify-between mb-2">
             <h3 class="text-xl font-semibold">Операционные системы</h3>
-            <NuxtLink :to="{ name: 'information_system-id-tables-operation_system-add', params: { id: serverId }}">
+            <NuxtLink :to="{ name: 'information_system-id-tables-operation_system-add', params: { id: systemId }}">
               <button class="btn btn-square bg-neutral-50 font-semibold text-2xl text-neutral-50-content mr-3 hover:bg-neutral-100 hover:text-neutral-50-content"><span class="mb-1">+</span></button>
             </NuxtLink>
           </div>
@@ -71,17 +141,30 @@
               </tr>
               </thead>
               <tbody>
-              <tr v-for="(item, index) in operatingSystem" :key="index">
-                <td>{{ item.name }}</td>
-                <td>{{ item.version }}</td>
-                <td>{{ item.description }}</td>
+              <tr v-for="(sversion, index) in operatingSystems" :key="index">
+                <td>{{ sversion.software_id.software_name }}</td>
+                <td>{{ sversion.version_name }}</td>
+                <td>{{ sversion.software_id.description }}</td>
                 <td class="text-right">
                   <div class="flex justify-end space-x-1">
-                    <button class="btn btn-square btn-sm bg-neutral-50 text-neutral-50-content hover:bg-neutral-100 hover:text-neutral-50-content">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                      </svg>
-                    </button>
+                    <NuxtLink :to="{
+                      name: 'information_system-id-tables-operation_system-rowId',
+                      params: {
+                        id: systemId,
+                        rowId: sversion.softwareversion_id
+                      },
+                      query: {
+                        name: sversion.software_id.software_name,
+                        version: sversion.version_name,
+                        description: sversion.software_id.description
+                      }
+                    }">
+                      <button class="btn btn-sm btn-square bg-neutral-50 text-neutral-50-content hover:bg-neutral-100 hover:text-neutral-50-content">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                        </svg>
+                      </button>
+                    </NuxtLink>
                     <button class="btn btn-square btn-sm bg-neutral-50 text-neutral-50-content hover:bg-neutral-100 hover:text-neutral-50-content">
                       <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -99,7 +182,7 @@
         <div class="mb-6">
           <div class="flex items-center justify-between mb-2">
             <h3 class="text-xl font-semibold">Софт</h3>
-            <NuxtLink :to="{ name: 'information_system-id-tables-soft-add', params: { id: serverId }}">
+            <NuxtLink :to="{ name: 'information_system-id-tables-soft-add', params: { id: systemId }}">
               <button class="btn btn-square bg-neutral-50 font-semibold text-2xl text-neutral-50-content mr-3 hover:bg-neutral-100 hover:text-neutral-50-content"><span class="mb-1">+</span></button>
             </NuxtLink>
           </div>
@@ -113,17 +196,30 @@
               </tr>
               </thead>
               <tbody>
-              <tr v-for="(item, index) in software" :key="index">
-                <td>{{ item.protocol }}</td>
-                <td>{{ item.port }}</td>
-                <td>{{ item.description }}</td>
+              <tr v-for="(sversion, index) in otherSoftware" :key="index">
+                <td>{{ sversion.software_id.software_name }}</td>
+                <td>{{ sversion.version_name }}</td>
+                <td>{{ sversion.software_id.description }}</td>
                 <td class="text-right">
                   <div class="flex justify-end space-x-1">
-                    <button class="btn btn-square btn-sm bg-neutral-50 text-neutral-50-content hover:bg-neutral-100 hover:text-neutral-50-content">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                      </svg>
-                    </button>
+                    <NuxtLink :to="{
+                      name: 'information_system-id-tables-soft-rowId',
+                      params: {
+                        id: systemId,
+                        rowId: sversion.softwareversion_id
+                      },
+                      query: {
+                        name: sversion.software_id.software_name,
+                        version: sversion.version_name,
+                        description: sversion.software_id.description
+                      }
+                    }">
+                      <button class="btn btn-sm btn-square bg-neutral-50 text-neutral-50-content hover:bg-neutral-100 hover:text-neutral-50-content">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                        </svg>
+                      </button>
+                    </NuxtLink>
                     <button class="btn btn-square btn-sm bg-neutral-50 text-neutral-50-content hover:bg-neutral-100 hover:text-neutral-50-content">
                       <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -141,7 +237,7 @@
         <div class="mb-6">
           <div class="flex items-center justify-between mb-2">
             <h3 class="text-xl font-semibold">Сервера</h3>
-            <NuxtLink :to="{ name: 'information_system-id-tables-servers_connection-add', params: { id: serverId }}">
+            <NuxtLink :to="{ name: 'information_system-id-tables-servers_connection-add', params: { id: systemId }}">
               <button class="btn btn-square bg-neutral-50 font-semibold text-2xl text-neutral-50-content mr-3 hover:bg-neutral-100 hover:text-neutral-50-content"><span class="mb-1">+</span></button>
             </NuxtLink>
           </div>
@@ -156,13 +252,13 @@
               </tr>
               </thead>
               <tbody>
-              <template v-for="(serverGroup, groupIndex) in serverGroups" :key="groupIndex">
+              <template v-for="(connection, index) in systemServerConnections" :key="index">
                 <tr class="active">
                   <td colspan="5" class="relative text-center font-semibold bg-base-100 text-base-content py-3">
                     <div class="flex justify-between items-center">
-                      <span class="flex-1 text-center">{{ serverGroup.name }}</span>
+                      <span class="flex-1 text-center text-lg">{{ getServerName(connection.server_id) }}</span>
                       <div class="flex justify-end space-x-1">
-                        <NuxtLink :to="{ name: 'information_system-id-tables-server_connect-add', params: { id: serverId }}">
+                        <NuxtLink :to="{ name: 'information_system-id-tables-server_connect-add', params: { id: systemId }}">
                           <button class=" text-xl btn btn-square btn-sm bg-neutral-50 text-neutral-50-content hover:bg-neutral-100 hover:text-neutral-50-content"><span class="mb-1">+</span></button>
                         </NuxtLink>
                         <button class="btn btn-square btn-sm bg-neutral-50 text-neutral-50-content hover:bg-neutral-100 hover:text-neutral-50-content">
@@ -174,18 +270,32 @@
                     </div>
                   </td>
                 </tr>
-                <tr v-for="(server, serverIndex) in serverGroup.servers" :key="serverIndex">
-                  <td>{{ server.ip }}</td>
-                  <td>{{ server.port }}</td>
-                  <td>{{ server.mapping }}</td>
-                  <td>{{ server.description }}</td>
+                <tr v-for="(connection, index) in systemServerConnections" :key="index">
+                  <td>{{ getServerIp(connection.server_id) }}</td>
+                  <td>{{ getServerPort(connection.server_id) }}</td>
+                  <td>{{ connection.mapping }}</td>
+                  <td>{{ connection.description }}</td>
                   <td class="text-right">
                     <div class="flex justify-end space-x-1">
-                      <button class="btn btn-square btn-sm bg-neutral-50 text-neutral-50-content hover:bg-neutral-100 hover:text-neutral-50-content">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                        </svg>
-                      </button>
+                      <NuxtLink :to="{
+                          name: 'information_system-id-tables-server_connect-rowId',
+                          params: {
+                            id: systemId,
+                            rowId: connection.connection_id
+                          },
+                          query: {
+                            ip: getServerIp(connection.server_id),
+                            port: getServerPort(connection.server_id),
+                            mapping: connection.mapping,
+                            description: connection.description || ''
+                          }
+                        }">
+                        <button class="btn btn-square btn-sm bg-neutral-50 text-neutral-50-content hover:bg-neutral-100 hover:text-neutral-50-content">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                          </svg>
+                        </button>
+                      </NuxtLink>
                       <button class="btn btn-square btn-sm bg-neutral-50 text-neutral-50-content hover:bg-neutral-100 hover:text-neutral-50-content">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -217,11 +327,11 @@
               </tr>
               </thead>
               <tbody>
-              <tr v-for="(item, index) in communications" :key="index">
-                <td>{{ item.server }}</td>
-                <td>{{ item.port }}</td>
-                <td>{{ item.ip }}</td>
-                <td>{{ item.description }}</td>
+              <tr v-for="(connection, index) in systemServerConnections" :key="index">
+                <td>{{ getServerName(connection.server_id) }}</td>
+                <td>{{ getServerPort(connection.server_id) }}</td>
+                <td>{{ getServerIp(connection.server_id) }}</td>
+                <td>{{ connection.description }}</td>
                 <td class="text-right">
                   <div class="flex justify-end space-x-1">
                     <button class="btn btn-square btn-sm bg-neutral-50 text-neutral-50-content hover:bg-neutral-100 hover:text-neutral-50-content">
@@ -247,7 +357,7 @@
 
   <div class="delete">
     <div class="tooltip tooltip-primary tooltip-left" data-tip="Удаление системы">
-        <button class="btn btn-xl btn-square bg-neutral-50 text-neutral-50-content shadow-md hover:bg-neutral-100 hover:text-neutral-50-content" @click="showPopup">
+        <button class="btn btn-xl btn-square bg-neutral-50 text-neutral-50-content shadow-md hover:bg-neutral-100 hover:text-neutral-50-content">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6L20 6M6 6l0 15M17 6l0 15M6 21L17 21M8 2L15 2" /></svg>
         </button>
     </div>
@@ -258,17 +368,22 @@
 <script lang="ts" setup>
 import { computed, watch } from 'vue';
 import { useRoute } from 'vue-router';
+import { useSystemStore } from '@/stores/SystemStore';
 import { useServerStore } from '@/stores/ServerStore';
+import { useSystemServerStore } from '@/stores/SystemServerStore';
 
-const route = useRoute();
+const systemServerStore = useSystemServerStore();
 const serverStore = useServerStore();
+const route = useRoute();
+const systemStore = useSystemStore();
 
-const serverId = computed(() => route.params.id);
-const server = computed(() => serverStore.getServerById(serverId.value));
-const loading = computed(() => serverStore.loading);
+const systemId = computed(() => route.params.id);
+const system = computed(() => systemStore.getSystemById(systemId.value));
+const loading = computed(() => systemStore.loading);
+const availableGroupsSystem = computed(() => systemStore.getAvailableGroupsSystem(systemId.value));
 
-watch(serverId, (newId) => {
-  serverStore.fetchServerById(newId);
+watch(systemId, (newId) => {
+  systemStore.fetchSystemById(newId);
 }, { immediate: true });
 
 const router = useRouter()
@@ -277,46 +392,53 @@ const goBack = () => {
   router.go(-1)
 }
 
+const editableSystemName = ref(system.value?.system_name || '');
+
+// Получаем связи для текущей системы
+const systemServerConnections = computed(() => {
+  return systemServerStore.getConnectionsBySystemId(systemId.value);
+});
+
+// Вспомогательные функции для получения данных сервера
+const getServerName = (serverId: string) => {
+  const server = serverStore.getServerById(serverId);
+  return server?.server_name || 'Неизвестно';
+};
+
+const getServerIp = (serverId: string) => {
+  const server = serverStore.getServerById(serverId);
+  return server?.id_ip[0]?.ip || 'Неизвестно';
+};
+
+const getServerPort = (serverId: string) => {
+  const server = serverStore.getServerById(serverId);
+  return server?.id_port[0]?.port || 'Неизвестно';
+};
+
+const operatingSystems = computed(() => {
+  return system.value?.sversion_id?.filter(sv =>
+      sv.software_id.softwaretype_id.type_id.includes('operational-system')
+  ) || [];
+});
+
+const otherSoftware = computed(() => {
+  return system.value?.sversion_id?.filter(sv =>
+      !sv.software_id.softwaretype_id.type_id.includes('operational-system')
+  ) || [];
+});
+
+onMounted(async () => {
+  await systemStore.fetchSystems();
+  await systemServerStore.fetchConnections();
+  await serverStore.fetchServers();
+});
+
 // Тип системы
-const types = ['Приложение', 'БД', 'Сетевое хранилище']
-const selectedType = ref(types[0])
-
-// Данные для таблиц
-const operatingSystem = ref([
-  { name: 'Ubunty', version: '14.*.*', description: 'Null' },
-  { name: 'ff', version: 'ff', description: 'Null' }
-])
-
-const software = ref([
-  { protocol: 'ff', port: 'ff', ip: 'ff', description: 'Null' },
-  { protocol: 'ff', port: 'ff', ip: 'ff', description: 'Null' }
-])
-
-const serverGroups = [
-  {
-    name: "Cepвep №1",
-    servers: [
-      { ip: "10.128.211.44", port: "80", mapping: "127.0.0:8080", description: "Null"},
-      { ip: "127.0.0.1", port: "8080", mapping: "Null", description: "Null"}
-    ]
-  },
-  {
-    name: "Cepвep №2",
-    servers: [
-      { ip: "192.168.1.100", port: "80", mapping: "127.0.0:8080", description: "Null"},
-      { ip: "192.168.1.101", port: "8080", mapping: "Null", description: "Null"}
-    ]
-  }
-]
-
-const communications = ref([
-  { server: 'ff', port: 'ff', ip: 'ff', description: 'Null' },
-  { server: 'ff', port: 'ff', ip: 'ff', description: 'Null' }
-])
+const types = computed(() => systemStore.getAllTypes);
 
 useSeoMeta({
-  title: 'Информация о системе',
-  ogTitle: 'Информация о системе',
+  title: `Информация о системе "${system.value.system_name}"`,
+  ogTitle: `Информация о системе "${system.value.system_name}"`,
   description: 'Подробная информация о системе',
   ogDescription: 'Подробная информация о системе'
 })

@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import type { ServerUnit } from '@/models/ServerUnit';
-import { testServerUnits } from '@/test_bd/test_bd';
+import { testServerUnits, testServerCluster, testGroups } from '@/test_bd/test_bd';
 
 export const useServerStore = defineStore('serverStore', {
     state: () => ({
@@ -14,6 +14,21 @@ export const useServerStore = defineStore('serverStore', {
         getServerById: (state) => (id: string) => {
             return state.cache.get(id) || state.servers.find(server => server.server_id === id);
         },
+        getAllClusters: (state) => {
+            const clusters = new Set<string>();
+
+            testServerCluster.forEach(cluster => {
+                clusters.add(cluster.cluster_name);
+            });
+            return Array.from(clusters);
+        },
+        getAvailableGroups: (state) => (serverId: string) => {
+            const server = state.cache.get(serverId) || state.servers.find(s => s.server_id === serverId);
+            if (!server) return testGroups;
+
+            const serverGroupIds = server.group_id.map(g => g.group_id);
+            return testGroups.filter(group => !serverGroupIds.includes(group.group_id));
+        }
     },
 
     actions: {

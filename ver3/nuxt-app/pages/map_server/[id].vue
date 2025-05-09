@@ -47,6 +47,10 @@
       <div class="bg-neutral p-4 rounded-box shadow">
         <p class="text-neutral-content">Нагрузка:</p>
         <div class="bg-neutral-focus p-4 mt-3 rounded-box">
+          <div class="flex justify-between mb-2">
+            <span class="text-xs text-neutral-content">CPU: {{ cpuLoad }}%</span>
+            <span class="text-xs text-neutral-content">RAM: {{ ramLoad }}%</span>
+          </div>
           <svg width="100%" height="160" viewBox="0 0 500 160" xmlns="http://www.w3.org/2000/svg">
             <!-- Оси графика -->
             <line x1="20" y1="20" x2="20" y2="140" stroke="currentColor" stroke-width="2" class="text-neutral-content" />
@@ -73,53 +77,52 @@
             <line x1="20" y1="60" x2="480" y2="60" stroke="currentColor" stroke-width="1" stroke-dasharray="5,5" class="text-neutral-content opacity-30" />
             <line x1="20" y1="100" x2="480" y2="100" stroke="currentColor" stroke-width="1" stroke-dasharray="5,5" class="text-neutral-content opacity-30" />
 
-            <!-- График нагрузки -->
+            <!-- График нагрузки CPU -->
             <polyline
-                points="20,140 40,120 60,100 80,110 100,90 120,80 140,100 160,70 180,90 200,110 220,60 240,80 260,100 280,50 300,70 320,90 340,110 360,40 380,60 400,80 420,100 440,30 460,50 480,70"
-                stroke=#5d8cde
+                :points="cpuPoints"
+                stroke="#5d8cde"
                 stroke-width="2"
                 fill="none"
                 stroke-linejoin="round"
                 stroke-linecap="round" />
 
-            <!-- Точки на графике -->
-            <circle cx="40" cy="120" r="2" fill=#5d8cde />
-            <circle cx="60" cy="100" r="2" fill=#5d8cde />
-            <circle cx="80" cy="110" r="2" fill=#5d8cde />
-            <circle cx="100" cy="90" r="2" fill=#5d8cde />
-            <circle cx="120" cy="80" r="2" fill=#5d8cde />
-            <circle cx="140" cy="100" r="2" fill=#5d8cde />
-            <circle cx="160" cy="70" r="2" fill=#5d8cde />
-            <circle cx="180" cy="90" r="2" fill=#5d8cde />
-            <circle cx="200" cy="110" r="2" fill=#5d8cde />
-            <circle cx="220" cy="60" r="2" fill=#5d8cde />
-            <circle cx="240" cy="80" r="2" fill=#5d8cde />
-            <circle cx="260" cy="100" r="2" fill=#5d8cde />
-            <circle cx="280" cy="50" r="2" fill=#5d8cde />
-            <circle cx="300" cy="70" r="2" fill=#5d8cde />
-            <circle cx="320" cy="90" r="2" fill=#5d8cde />
-            <circle cx="340" cy="110" r="2" fill=#5d8cde />
-            <circle cx="360" cy="40" r="2" fill=#5d8cde />
-            <circle cx="380" cy="60" r="2" fill=#5d8cde />
-            <circle cx="400" cy="80" r="2" fill=#5d8cde />
-            <circle cx="420" cy="100" r="2" fill=#5d8cde />
-            <circle cx="440" cy="30" r="2" fill=#5d8cde />
-            <circle cx="460" cy="50" r="2" fill=#5d8cde />
-            <circle cx="480" cy="70" r="2" fill=#5d8cde />
+            <!-- График нагрузки RAM -->
+            <polyline
+                :points="ramPoints"
+                stroke="#de5d8c"
+                stroke-width="2"
+                fill="none"
+                stroke-linejoin="round"
+                stroke-linecap="round" />
+
+            <!-- Точки на графике CPU -->
+            <circle v-for="(point, index) in cpuPointsArray" :key="'cpu-'+index" :cx="point.x" :cy="point.y" r="2" fill="#5d8cde" />
+
+            <!-- Точки на графике RAM -->
+            <circle v-for="(point, index) in ramPointsArray" :key="'ram-'+index" :cx="point.x" :cy="point.y" r="2" fill="#de5d8c" />
           </svg>
+          <div class="flex justify-center gap-4 mt-2">
+            <div class="flex items-center">
+              <div class="w-3 h-3 rounded-full bg-[#5d8cde] mr-1"></div>
+              <span class="text-xs text-neutral-content">CPU</span>
+            </div>
+            <div class="flex items-center">
+              <div class="w-3 h-3 rounded-full bg-[#de5d8c] mr-1"></div>
+              <span class="text-xs text-neutral-content">RAM</span>
+            </div>
+          </div>
         </div>
       </div>
-
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref, computed } from 'vue';
+import { onMounted, ref, computed, watch } from 'vue';
 import { DataSet } from 'vis-data';
 import { Network } from 'vis-network';
 import { useServerStore } from '@/stores/ServerStore';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 const route = useRoute();
 const router = useRouter();
@@ -128,9 +131,67 @@ const serverId = route.params.id as string;
 const networkInstance = ref<any>(null);
 const isDarkTheme = ref(false);
 
+// Данные для графика нагрузки
+const cpuLoad = ref(0);
+const ramLoad = ref(0);
+const cpuHistory = ref<number[]>(Array(24).fill(0));
+const ramHistory = ref<number[]>(Array(24).fill(0));
+
 const currentServer = computed(() => {
   return serverStore.servers.find(s => s.server_id === serverId);
 });
+
+// Генерация точек для графика CPU
+const cpuPoints = computed(() => {
+  return cpuHistory.value.map((value, index) => {
+    const x = 20 + (index * (460 / (cpuHistory.value.length - 1)));
+    const y = 140 - (value * 1.2);
+    return `${x},${y}`;
+  }).join(' ');
+});
+
+// Генерация точек для графика RAM
+const ramPoints = computed(() => {
+  return ramHistory.value.map((value, index) => {
+    const x = 20 + (index * (460 / (ramHistory.value.length - 1)));
+    const y = 140 - (value * 1.2);
+    return `${x},${y}`;
+  }).join(' ');
+});
+
+// Массив точек для CPU (для отрисовки кружков)
+const cpuPointsArray = computed(() => {
+  return cpuHistory.value.map((value, index) => {
+    const x = 20 + (index * (460 / (cpuHistory.value.length - 1)));
+    const y = 140 - (value * 1.2);
+    return { x, y };
+  });
+});
+
+// Массив точек для RAM (для отрисовки кружков)
+const ramPointsArray = computed(() => {
+  return ramHistory.value.map((value, index) => {
+    const x = 20 + (index * (460 / (ramHistory.value.length - 1)));
+    const y = 140 - (value * 1.2);
+    return { x, y };
+  });
+});
+
+// Функция для обновления данных нагрузки
+const updateLoadData = () => {
+  // Генерация случайных значений нагрузки
+  const newCpuLoad = Math.min(100, Math.max(0, cpuLoad.value + (Math.random() * 20 - 10)));
+  const newRamLoad = Math.min(100, Math.max(0, ramLoad.value + (Math.random() * 15 - 7.5)));
+
+  cpuLoad.value = Math.round(newCpuLoad * 10) / 10;
+  ramLoad.value = Math.round(newRamLoad * 10) / 10;
+
+  cpuHistory.value.shift();
+  cpuHistory.value.push(cpuLoad.value);
+
+  ramHistory.value.shift();
+  ramHistory.value.push(ramLoad.value);
+};
 
 // Функция для форматирования списка элементов
 const formatItems = (items: any) => {
@@ -165,8 +226,22 @@ onMounted(async () => {
     attributeFilter: ['data-theme']
   });
 
+  // Инициализация начальных значений нагрузки
+  cpuLoad.value = Math.floor(Math.random() * 30 + 20);
+  ramLoad.value = Math.floor(Math.random() * 40 + 30);
+  cpuHistory.value = Array(24).fill(0).map(() => Math.floor(Math.random() * 30 + 20));
+  ramHistory.value = Array(24).fill(0).map(() => Math.floor(Math.random() * 40 + 30));
+
+  // Запуск обновления данных каждые 2 секунды
+  const loadInterval = setInterval(updateLoadData, 2000);
+
   await serverStore.fetchServers();
   initNetwork();
+
+  // Очистка интервала при размонтировании компонента
+  onUnmounted(() => {
+    clearInterval(loadInterval);
+  });
 });
 
 watch(isDarkTheme, () => {
@@ -182,7 +257,6 @@ const initNetwork = () => {
   const nodes = new DataSet<any>();
   const edges = new DataSet<any>();
 
-  // Находим текущий сервер
   const mainServer = serverStore.servers.find(s => s.server_id === serverId);
   if (!mainServer) return;
 
@@ -201,8 +275,6 @@ const initNetwork = () => {
       }
     }
   });
-
-  // Добавляем связанные элементы
 
   // Кластер
   if (mainServer.cluster_id) {
@@ -436,7 +508,6 @@ const initNetwork = () => {
     }
   };
 
-  // Создаем сеть
   const container = document.getElementById('network');
   if (container) {
     if (networkInstance.value) {

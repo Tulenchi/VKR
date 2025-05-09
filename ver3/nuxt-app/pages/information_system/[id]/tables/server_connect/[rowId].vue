@@ -41,28 +41,28 @@
         <div class="mb-2">
           <div class="flex items-center justify-between mb-2">
             <h3 class="text-xl font-semibold">IP</h3>
-            <input type="text" placeholder="Введите текст" class="input input-neutral input-base-100" />
+            <input type="text" v-model="form.ip" placeholder="Введите текст" class="input input-neutral input-base-100" />
           </div>
         </div>
 
         <div class="mb-2">
           <div class="flex items-center justify-between mb-2">
             <h3 class="text-xl font-semibold">Port</h3>
-            <input type="text" placeholder="Введите текст" class="input input-neutral input-base-100" />
+            <input type="text" v-model="form.port" placeholder="Введите текст" class="input input-neutral input-base-100" />
           </div>
         </div>
 
         <div class="mb-2">
           <div class="flex items-center justify-between mb-3">
             <h3 class="text-xl font-semibold">Mapping</h3>
-            <input type="text" placeholder="Введите текст" class="input input-neutral input-base-100" />
+            <input type="text" v-model="form.mapping" placeholder="Введите текст" class="input input-neutral input-base-100" />
           </div>
         </div>
 
         <div class="mb-2">
           <div class="flex justify-between mb-2">
             <h3 class="text-xl font-semibold">Description</h3>
-            <textarea type="text" placeholder="Введите текст" class="textarea textarea-neutral resize-none overflow-hidden" rows="5" @input="autoResizeTextarea" ref="textarea"></textarea>
+            <textarea type="text" v-model="form.description" placeholder="Введите текст" class="textarea textarea-neutral resize-none overflow-hidden" rows="5" @input="autoResizeTextarea" ref="textarea"></textarea>
           </div>
         </div>
       </div>
@@ -78,19 +78,37 @@
 </template>
 
 <script lang="ts" setup>
+import {ref, onMounted, computed} from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
-import { ref } from 'vue';
-
-const textarea = ref(null);
+const route = useRoute();
+const router = useRouter();
+const textarea = ref<HTMLTextAreaElement | null>(null);
 
 const autoResizeTextarea = () => {
   if (textarea.value) {
-    textarea.value.style.height = 'auto'; // Сначала сбрасываем высоту
-    textarea.value.style.height = `${textarea.value.scrollHeight}px`; // Устанавливаем новую высоту
+    textarea.value.style.height = 'auto';
+    textarea.value.style.height = `${textarea.value.scrollHeight}px`;
   }
 };
 
-const router = useRouter()
+const form = ref({
+  ip: '',
+  port: '',
+  mapping: '',
+  description: ''
+});
+
+onMounted(() => {
+  if (route.query) {
+    form.value = {
+      ip: route.query.ip as string || '',
+      port: route.query.port as string || '',
+      mapping: route.query.mapping as string || '',
+      description: route.query.description as string || ''
+    }
+  }
+});
 
 const goBack = () => {
   router.go(-1)
@@ -98,11 +116,7 @@ const goBack = () => {
 
 const showPopup = () => {
   const confirmation = confirm("Вы уверены, что хотите удалить данный объект?");
-
-  //if (confirmation) {
-  //  noteStore.deleteNote(note.id);
-  //  router.push('/');
-  //}
+  // Логика удаления
 }
 
 useSeoMeta({

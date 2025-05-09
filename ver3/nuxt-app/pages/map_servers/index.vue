@@ -77,9 +77,9 @@
             <div class="tabs">
               <a class="tab tab-lifted" :class="{ 'tab-active': activeTab === 'ip' }" @click="activeTab = 'ip'">IP-адреса</a>
               <a class="tab tab-lifted" :class="{ 'tab-active': activeTab === 'ports' }" @click="activeTab = 'ports'">Порты</a>
-              <a class="tab tab-lifted" :class="{ 'tab-active': activeTab === 'software' }" @click="activeTab = 'software'">ПО</a>
-              <a class="tab tab-lifted" :class="{ 'tab-active': activeTab === 'hardware' }" @click="activeTab = 'hardware'">Железо</a>
               <a class="tab tab-lifted" :class="{ 'tab-active': activeTab === 'domains' }" @click="activeTab = 'domains'">Домены</a>
+              <a class="tab tab-lifted" :class="{ 'tab-active': activeTab === 'hardware' }" @click="activeTab = 'hardware'">Конфигурация</a>
+              <a class="tab tab-lifted" :class="{ 'tab-active': activeTab === 'software' }" @click="activeTab = 'software'">ПО</a>
             </div>
 
             <div v-if="activeTab === 'ip'" class="overflow-x-auto">
@@ -151,8 +151,8 @@
               <table class="table table-zebra">
                 <thead>
                 <tr>
-                  <th>Компонент</th>
-                  <th>Характеристики</th>
+                  <th>Тип</th>
+                  <th>Значение</th>
                   <th>Описание</th>
                 </tr>
                 </thead>
@@ -208,14 +208,16 @@
 
           <!-- Детали системы -->
           <div v-else-if="selectedNode.group === 'system'" class="py-4">
-            <h4 class="font-semibold">Информация о системе</h4>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <h4 class="font-semibold">Информация о системе</h4>
+              <h4 class="font-semibold">Связанные серверы</h4>
+            </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <p><strong>Тип системы:</strong> {{ selectedSystem?.systemtype_id?.type || 'не указан' }}</p>
+                <p class="mt-2"><strong>Тип системы:</strong> {{ selectedSystem?.systemtype_id?.type || 'не указан' }}</p>
                 <p><strong>Описание:</strong> {{ selectedSystem?.description || 'нет' }}</p>
               </div>
               <div>
-                <h4 class="font-semibold">Связанные серверы</h4>
                 <ul class="menu bg-base-100 rounded-box">
                   <li v-for="server in serversInSystem" :key="server.server_id">
                     <a @click="selectNodeById(server.server_id)">{{ server.server_name }}</a>
@@ -227,38 +229,53 @@
 
           <!-- Детали группы -->
           <div v-else-if="selectedNode.group === 'group'" class="py-4">
-            <h4 class="font-semibold">Информация о группе</h4>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <p><strong>Название:</strong> {{ selectedGroup?.group_name }}</p>
+              <h4 class="font-semibold">Информация о группе</h4>
+              <h4 class="font-semibold">Связанные серверы</h4>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+             <div>
+                <p class="mt-2"><strong>Название:</strong> {{ selectedGroup?.group_name }}</p>
                 <p><strong>Описание:</strong> {{ selectedGroup?.description || 'нет' }}</p>
+
+                <div class="invisible h-0">
+                  <h4 class="font-semibold">Связанные системы</h4>
+                </div>
               </div>
-              <div>
-                <h4 class="font-semibold">Связанные серверы</h4>
-                <ul class="menu bg-base-100 rounded-box">
-                  <li v-for="server in serversForGroup" :key="server.server_id">
-                    <a @click="selectNodeById(server.server_id)">{{ server.server_name }}</a>
-                  </li>
-                </ul>
-              </div>
-              <div class="divider"></div>
-              <div>
-                <h4 class="font-semibold">Связанные системы</h4>
-                <ul class="menu bg-base-100 rounded-box">
-                  <li v-for="system in systemsInGroup" :key="system.system_id">
-                    <a @click="selectNodeById(system.system_id)">{{ system.system_name }}</a>
-                  </li>
-                </ul>
+
+              <div class="space-y-4">
+                <div>
+                  <ul class="menu bg-base-100 rounded-box">
+                    <li v-for="server in serversForGroup" :key="server.server_id">
+                      <a @click="selectNodeById(server.server_id)">{{ server.server_name }}</a>
+                    </li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h4 class="font-semibold">Связанные системы</h4>
+                  <ul class="menu bg-base-100 rounded-box">
+                    <li v-for="system in systemsInGroup" :key="system.system_id">
+                      <a @click="selectNodeById(system.system_id)">{{ system.system_name }}</a>
+                    </li>
+                  </ul>
+                </div>
               </div>
             </div>
           </div>
 
           <!-- Детали домена -->
+          <!--
           <div v-else-if="selectedNode.group === 'domain'" class="py-4">
-            <h4 class="font-semibold">Информация о домене</h4>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <h4 class="font-semibold">Информация о домене</h4>
+              <h4 class="font-semibold">Связанные серверы</h4>
+            </div>
+
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <p><strong>DNS записи:</strong></p>
+                <p class="mt-2"><strong>DNS записи:</strong></p>
                 <ul class="list-disc pl-5">
                   <li v-for="dns in selectedDomain?.dnsr_id" :key="dns.dnsr_id">
                     {{ dns.type }}: {{ dns.value }}
@@ -267,7 +284,6 @@
                 <p class="mt-2"><strong>Описание:</strong> {{ selectedDomain?.description || 'нет' }}</p>
               </div>
               <div>
-                <h4 class="font-semibold">Связанные серверы</h4>
                 <ul class="menu bg-base-100 rounded-box">
                   <li v-for="server in serversForDomain" :key="server.server_id">
                     <a @click="selectNodeById(server.server_id)">{{ server.server_name }}</a>
@@ -276,6 +292,7 @@
               </div>
             </div>
           </div>
+          -->
 
           <!-- Кнопки закрытия -->
           <div class="modal-action">
@@ -397,7 +414,7 @@ const systemsInServer = computed(() => {
 const systemsInGroup = computed(() => {
   if (!selectedNode.value || selectedNode.value.group !== 'group') return [];
 
-  // Собираем все системы, которые принадлежат выбранной группе
+  // Все системы, которые принадлежат выбранной группе
   const systems = new Map<string, SystemName>();
 
   serverStore.servers.forEach(server => {
@@ -422,7 +439,7 @@ const checkTheme = () => {
 onMounted(async () => {
   checkTheme();
 
-  // Наблюдаем за изменениями темы
+  // Наблюдение за изменениями темы
   const observer = new MutationObserver((mutations) => {
     mutations.forEach(mutation => {
       if (mutation.attributeName === 'data-theme') {
@@ -448,25 +465,13 @@ watch(isDarkTheme, () => {
   }
 });
 
-function getTextColorFromTheme() {
-  const tempDiv = document.createElement('div');
-  tempDiv.className = 'text-neutral-content';
-  tempDiv.style.display = 'none';
-  document.body.appendChild(tempDiv);
-
-  const color = getComputedStyle(tempDiv).color;
-  document.body.removeChild(tempDiv);
-
-  return color;
-}
-
 const initNetwork = () => {
   if (!serverStore.servers || serverStore.servers.length === 0) return;
 
   const nodes = new DataSet<any>();
   const edges = new DataSet<any>();
 
-  // Сначала создаем все группы
+  // Создание всех групп
   const allGroups = new Map<string, Group>();
   serverStore.servers.forEach(server => {
     server.group_id?.forEach(group => {
@@ -476,7 +481,7 @@ const initNetwork = () => {
     });
   });
 
-  // Добавляем узлы для групп
+  // Добавление узлов для групп
   allGroups.forEach(group => {
     nodes.add({
       id: group.group_id,
@@ -552,7 +557,7 @@ const initNetwork = () => {
       });
     }
 
-    // Собираем информацию о связях систем с группами
+    // Информация о связях систем с группами
     if (server.system_id && server.system_id.length > 0) {
       server.system_id.forEach(system => {
         if (!nodes.get(system.system_id)) {
@@ -597,6 +602,7 @@ const initNetwork = () => {
     if (server.domain_id) {
       const domains = Array.isArray(server.domain_id) ? server.domain_id : [server.domain_id];
 
+      /*
       domains.forEach(domain => {
         if (!nodes.get(domain.domain_id)) {
           nodes.add({
@@ -621,11 +627,11 @@ const initNetwork = () => {
           label: 'домен',
           color: { color: '#795548' }
         });
-      });
+      });*/
     }
   });
 
-  // Добавляем ребра системы-группы один раз
+  // Ребра системы-группы один раз
   systemToGroups.forEach((groups, systemId) => {
     groups.forEach(groupId => {
       edges.add({
@@ -644,27 +650,29 @@ const initNetwork = () => {
   const options = {
     layout: {
       improvedLayout: true,
-      randomSeed: 42, // Фиксированное значение для стабильности
+      randomSeed: 42,
       hierarchical: {
-        enabled: false // Отключаем иерархическое расположение
+        enabled: false // Иерархическое расположение
       }
     },
     physics: {
       enabled: true,
-      solver: 'forceAtlas2Based', // Более эффективный алгоритм
+      solver: 'forceAtlas2Based',
       forceAtlas2Based: {
         gravitationalConstant: -110,
         centralGravity: 0.01,
-        springLength: 200,
+        springLength: 200, // Длина пружины
         springConstant: 0.05,
         damping: 0.3,
-        avoidOverlap: 1 // Увеличено для лучшего разделения
+        avoidOverlap: 1 // 0-1, где 1 - строгое избегание перекрытия
       },
       stabilization: {
         enabled: true,
         iterations: 2000,
         updateInterval: 25
-      }
+      },
+      timestep: 0.5,
+      adaptiveTimestep: true
     },
     nodes: {
       font: {
@@ -683,7 +691,8 @@ const initNetwork = () => {
       margin: 15, // Отступ вокруг узлов
       widthConstraint: {
         maximum: 255 // Максимальная ширина текста
-      }
+      },
+      physics: true
     },
     edges: {
       width: 1,
@@ -693,7 +702,7 @@ const initNetwork = () => {
       },
       font: {
         strokeWidth: 0, // Это убирает контур вокруг текста
-        color: textColor, // Используем тот же цвет, что и для узлов
+        color: textColor,
         size: 12, // Размер шрифта
         align: 'middle' // Выравнивание
       },
@@ -709,10 +718,11 @@ const initNetwork = () => {
         inherit: 'from',
         opacity: 0.8
       },
-      hoverWidth: 1.5
+      hoverWidth: 1.5,
+      physics: true
     },
     interaction: {
-      dragNodes: false,
+      dragNodes: true,
       dragView: true,        // Разрешает перемещение всей сети (панорамирование)
       hideEdgesOnDrag: false, // Не скрывать рёбра при перетаскивании
       hideNodesOnDrag: false, // Не скрывать узлы при перетаскивании
@@ -732,7 +742,6 @@ const initNetwork = () => {
     }
   };
 
-  // Создаем сеть
   const container = document.getElementById('network');
   if (container) {
     if (networkInstance.value) {
@@ -751,6 +760,7 @@ const initNetwork = () => {
         },
         padding: 100           // Отступ от краев (в пикселях)
       });
+      networkInstance.value.setOptions({ physics: false })
     });
 
     // Обработчик клика по узлу

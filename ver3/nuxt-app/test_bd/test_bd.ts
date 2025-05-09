@@ -17,6 +17,7 @@ import type { SoftwareType } from '@/models/SoftwareType';
 import type { SystemType } from '@/models/SystemType';
 import type { DNS } from '@/models/DNS';
 import type { DNSRecord } from '@/models/DNSRecord';
+import type { SystemServerConnection } from '@/models/SystemServerConnection';
 import type { htype_hMU } from '@/models/htype_hMU';
 import type { domain_ip } from '@/models/domain_ip';
 import type { port_protocol } from '@/models/port_protocol';
@@ -218,7 +219,7 @@ export const testServerCluster: ServerCluster[] = [
 export const testSoftwareTypes: SoftwareType[] = [
     {
         softwaretype_id: '6ba7b810-9dad-11d1-80b4-00c04fd430c8',
-        type_id: 'c4886f1d-3615-4fae-9c16-ab5468bf5d66',
+        type_id: 'web-server',
         software_type_name: 'Web Server',
         provider: 'Apache',
         documentation: 'docs.apache.org',
@@ -226,10 +227,18 @@ export const testSoftwareTypes: SoftwareType[] = [
     },
     {
         softwaretype_id: '550e8400-e29b-41d4-a716-446655440000',
-        type_id: 'df876b6c-acd7-49f9-a1d8-3ad0361c8603',
+        type_id: 'database',
         software_type_name: 'Database',
         provider: 'Oracle',
         documentation: 'docs.oracle.com',
+        is_reusable: false
+    },
+    {
+        softwaretype_id: 'f022b00d-4189-4217-b402-127299f0e979',
+        type_id: 'operational-system-1',
+        software_type_name: 'Operational System',
+        provider: 'Microsoft',
+        documentation: 'https://learn.microsoft.com/en-us/windows/',
         is_reusable: false
     },
 ];
@@ -247,6 +256,12 @@ export const testSoftware: Software[] = [
         description: 'null',
         softwaretype_id: testSoftwareTypes[1]
     },
+    {
+        software_id: '4cc352fd-aaff-418c-87dc-b8d5f12b8e7a',
+        software_name: 'Windows',
+        description: 'null',
+        softwaretype_id: testSoftwareTypes[2]
+    },
 ];
 
 export const testSoftwareVersion: SoftwareVersion[] = [
@@ -259,6 +274,11 @@ export const testSoftwareVersion: SoftwareVersion[] = [
         softwareversion_id: '4b7a2412-a48b-496b-8c23-0cba80a52de9',
         version_name: '14.*.*',
         software_id: testSoftware[1]
+    },
+    {
+        softwareversion_id: '4b7a2412-a48b-496b-8c23-0cba80a52de9',
+        version_name: '11',
+        software_id: testSoftware[2]
     },
 ];
 
@@ -353,9 +373,9 @@ export const testSystemName: SystemName[] = [
         system_id: '489ec96a-d9f5-451f-b83e-2d0294f5e5b2',
         system_name: 'System_3',
         description: 'null',
-        systemtype_id: testSystemType[1],
+        systemtype_id: testSystemType[2],
         ports_id: testNetworkPorts.slice(1, 2),
-        sversion_id: testSoftwareVersion.slice(1, 2),
+        sversion_id: testSoftwareVersion.slice(1, 3),
         group_id: testGroups.slice(1, 2)
     },
     {
@@ -364,14 +384,14 @@ export const testSystemName: SystemName[] = [
         description: 'null',
         systemtype_id: testSystemType[0],
         ports_id: testNetworkPorts.slice(0, 1),
-        sversion_id: testSoftwareVersion.slice(0, 1),
+        sversion_id: testSoftwareVersion.slice(1, 3),
         group_id: testGroups.slice(0, 1)
     },
     {
         system_id: '4d4e1e90-3806-44fc-804a-b62d4f7e8adf',
         system_name: 'System_5',
         description: 'null',
-        systemtype_id: testSystemType[0],
+        systemtype_id: testSystemType[1],
         ports_id: testNetworkPorts.slice(0),
         sversion_id: testSoftwareVersion.slice(0),
         group_id: testGroups.slice(0)
@@ -380,18 +400,18 @@ export const testSystemName: SystemName[] = [
         system_id: '48a83304-0863-4cf7-b649-286b10c605c1',
         system_name: 'System_6',
         description: 'null',
-        systemtype_id: testSystemType[1],
+        systemtype_id: testSystemType[2],
         ports_id: testNetworkPorts.slice(0, 1),
-        sversion_id: testSoftwareVersion.slice(0, 1),
+        sversion_id: testSoftwareVersion.slice(0, 3),
         group_id: testGroups.slice(0, 1)
     },
     {
         system_id: 'c3f41962-ce62-48ee-bb68-47deaeb8b3f5',
         system_name: 'System_7',
         description: 'null',
-        systemtype_id: testSystemType[1],
+        systemtype_id: testSystemType[0],
         ports_id: testNetworkPorts.slice(1, 2),
-        sversion_id: testSoftwareVersion.slice(1, 2),
+        sversion_id: testSoftwareVersion.slice(1, 3),
         group_id: testGroups.slice(1, 2)
     }
 ];
@@ -408,7 +428,7 @@ export const testServerUnits: ServerUnit[] = [
         id_port: testNetworkPorts.slice(0),
         domain_id: testDomains.slice(0, 1),
         DNSRecord_id: testDNSRecord.slice(0),
-        sversion_id: testSoftwareVersion.slice(0),
+        sversion_id: testSoftwareVersion.slice(0, 2),
         hardware_id: testHardware.slice(0),
         group_id: testGroups.slice(0)
     },
@@ -423,7 +443,7 @@ export const testServerUnits: ServerUnit[] = [
         id_port: testNetworkPorts.slice(0, 1),
         domain_id: testDomains.slice(1, 2),
         DNSRecord_id: testDNSRecord.slice(0),
-        sversion_id: testSoftwareVersion.slice(0),
+        sversion_id: testSoftwareVersion.slice(0, 2),
         hardware_id: testHardware.slice(0),
         group_id: testGroups.slice(0)
     },
@@ -486,5 +506,57 @@ export const testServerUnits: ServerUnit[] = [
         sversion_id: testSoftwareVersion.slice(1, 2),
         hardware_id: testHardware.slice(1, 2),
         group_id: testGroups.slice(1, 2)
+    },
+];
+
+export const testSystemServerConnections: SystemServerConnection[] = [
+    {
+        connection_id: '1a2b3c4d-5e6f-7890-abcd-ef1234567890',
+        system_id: '550e8400-e29b-41d4-a716-446655440000', // System_1
+        server_id: 'edf3fbf9-a770-41fc-9b75-b85037955cde', // 1
+        mapping: '127.0.0.1:8080',
+        description: 'Основное подключение'
+    },
+    {
+        connection_id: '2b3c4d5e-6f7a-8901-bcde-f23456789012',
+        system_id: '6ba7b810-9dad-11d1-80b4-00c04fd430c8', // System_2
+        server_id: 'edf3fbf9-a770-41fc-9b75-b85037955cde', // 1
+        mapping: '192.168.1.100:80',
+        description: 'Резервное подключение'
+    },
+    {
+        connection_id: '3c4d5e6f-7a8b-9012-cdef-345678901234',
+        system_id: '489ec96a-d9f5-451f-b83e-2d0294f5e5b2', // System_3
+        server_id: '1a782b0c-bef4-4576-ae5a-29f059913e17', // 2
+        mapping: '10.0.0.1:443',
+        description: 'Основное подключение'
+    },
+    {
+        connection_id: 'f18d2e64-4d3b-4f40-8da3-529768562c68',
+        system_id: '4c859463-cffe-4fef-ab29-40c28f239641', // System_4
+        server_id: '26511abf-8f55-49e8-aa47-3c261c19a2a8', // 3
+        mapping: '10.0.0.1:443',
+        description: 'Основное подключение'
+    },
+    {
+        connection_id: '6b2fce74-60fd-4a04-aca2-682be75f7e75',
+        system_id: '4d4e1e90-3806-44fc-804a-b62d4f7e8adf', // System_5
+        server_id: '8cd62d46-ab49-4cf1-8f7b-bb8313a13ae6', // 4
+        mapping: '10.0.0.1:443',
+        description: 'Основное подключение'
+    },
+    {
+        connection_id: '35b63546-ee75-4c5b-aae4-72ab88f1b2a8',
+        system_id: '48a83304-0863-4cf7-b649-286b10c605c1', // System_6
+        server_id: 'a4e7f16d-ed8d-40c4-8f2e-e49fac2abe30', // 5
+        mapping: '10.0.0.1:443',
+        description: 'Основное подключение'
+    },
+    {
+        connection_id: '052c0da8-dc52-4377-b3fb-0d41a3f1dcfe',
+        system_id: 'c3f41962-ce62-48ee-bb68-47deaeb8b3f5', // System_7
+        server_id: 'a8960cc3-173e-4326-bc53-d2d18d9030a9', // 6
+        mapping: '10.0.0.1:443',
+        description: 'Основное подключение'
     },
 ];

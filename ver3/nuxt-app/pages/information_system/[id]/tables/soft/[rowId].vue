@@ -47,7 +47,7 @@
         <div class="mb-2">
           <div class="flex items-center justify-between mb-2">
             <h3 class="text-xl font-semibold">Name</h3>
-            <input type="text" v-model="form.ip" placeholder="Введите текст" class="input input-neutral input-base-100" />
+            <input type="text" v-model="form.name" placeholder="Введите текст" class="input input-neutral input-base-100" />
           </div>
         </div>
 
@@ -79,12 +79,9 @@
 <script lang="ts" setup>
 import {ref, onMounted, computed} from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { useServerStore } from '@/stores/ServerStore';
 
 const route = useRoute();
 const router = useRouter();
-const serverStore = useServerStore();
-const loading = ref(false);
 const textarea = ref<HTMLTextAreaElement | null>(null);
 
 const autoResizeTextarea = () => {
@@ -94,33 +91,21 @@ const autoResizeTextarea = () => {
   }
 };
 
-onMounted(() => {
-  autoResizeTextarea();
-});
-
-const serverId = computed(() => Array.isArray(route.params.id) ? route.params.id[0] : route.params.id);
-const server = computed(() => serverStore.getServerById(serverId.value));
-const rowId = computed(() => route.params.rowId);
-
-const selectedIp = computed(() => {
-  return server.value?.ip.find(ip => ip.id_ip === rowId.value);
-});
-
 const form = ref({
-  ip: '',
+  name: '',
   version: '',
-  type: '',
   description: ''
 });
 
-watch(selectedIp, (newIp) => {
-  if (newIp) {
-    form.value.ip = newIp.ip;
-    form.value.version = newIp.version;
-    form.value.type = newIp.identifier.identifier;
-    form.value.description = newIp.description;
+onMounted(() => {
+  if (route.query) {
+    form.value = {
+      name: route.query.name as string || '',
+      version: route.query.version as string || '',
+      description: route.query.description as string || ''
+    }
   }
-}, { immediate: true });
+});
 
 const goBack = () => {
   router.go(-1)
@@ -128,11 +113,7 @@ const goBack = () => {
 
 const showPopup = () => {
   const confirmation = confirm("Вы уверены, что хотите удалить данный объект?");
-
-  //if (confirmation) {
-  //  noteStore.deleteNote(note.id);
-  //  router.push('/');
-  //}
+  // Логика удаления
 }
 
 useSeoMeta({

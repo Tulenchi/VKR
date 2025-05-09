@@ -20,7 +20,7 @@
       </NuxtLink>
     </div>
     <div class="navbar-center">
-      <a class="text-2xl text-primary-content">Добавление к серверу №1</a>
+      <a class="text-2xl text-primary-content">Добавление к серверу</a>
     </div>
     <div class="navbar-end text-primary-content">
       <ThemeSwitcher />

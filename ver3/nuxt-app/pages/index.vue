@@ -54,7 +54,7 @@
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
         </svg>
       </button>
-      <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow-2xl bg-neutral-50 text-neutral-content rounded-box w-56 space-y-2 mb-1">
+      <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow-2xl bg-neutral-50 text-neutral-content rounded-box w-56 space-y-1 mb-1">
         <li>
           <NuxtLink :to="{ name: 'server_add' }" class="justify-between">
             Добавить сервер
@@ -94,7 +94,6 @@ store.fetchServers();
   right: 15px;
 }
 
-/* Стили для выпадающего меню */
 .dropdown-content {
   transform-origin: bottom right;
   animation: scaleIn 0.2s ease-out;
