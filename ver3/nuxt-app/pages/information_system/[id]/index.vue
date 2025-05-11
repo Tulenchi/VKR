@@ -113,11 +113,10 @@
                 class="flex items-center justify-between"
             >
               <span class="text-lg">{{ group.group_name }}</span>
-              <button class="btn btn-md btn-square bg-neutral-50 text-neutral-50-content mr-3 hover:bg-neutral-100 hover:text-neutral-50-content">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
+              <ConfirmDeleteModal
+                  :modal-id="'delete-group-' + group.group_id"
+                  :custom-button-class="'btn btn-square bg-neutral-50 font-semibold text-2xl text-neutral-50-content mr-3 hover:bg-neutral-100 hover:text-neutral-50-content'"
+              />
             </div>
           </div>
         </div>
@@ -165,11 +164,9 @@
                         </svg>
                       </button>
                     </NuxtLink>
-                    <button class="btn btn-square btn-sm bg-neutral-50 text-neutral-50-content hover:bg-neutral-100 hover:text-neutral-50-content">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                      </svg>
-                    </button>
+                    <ConfirmDeleteModal
+                        :modal-id="'delete-operation-system-' + sversion.softwareversion_id"
+                    />
                   </div>
                 </td>
               </tr>
@@ -220,11 +217,9 @@
                         </svg>
                       </button>
                     </NuxtLink>
-                    <button class="btn btn-square btn-sm bg-neutral-50 text-neutral-50-content hover:bg-neutral-100 hover:text-neutral-50-content">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                      </svg>
-                    </button>
+                    <ConfirmDeleteModal
+                        :modal-id="'delete-soft-' + sversion.softwareversion_id"
+                    />
                   </div>
                 </td>
               </tr>
@@ -261,11 +256,9 @@
                         <NuxtLink :to="{ name: 'information_system-id-tables-server_connect-add', params: { id: systemId }}">
                           <button class=" text-xl btn btn-square btn-sm bg-neutral-50 text-neutral-50-content hover:bg-neutral-100 hover:text-neutral-50-content"><span class="mb-1">+</span></button>
                         </NuxtLink>
-                        <button class="btn btn-square btn-sm bg-neutral-50 text-neutral-50-content hover:bg-neutral-100 hover:text-neutral-50-content">
-                          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                          </svg>
-                        </button>
+                        <ConfirmDeleteModal
+                            :modal-id="'delete-connection-server-' + connection.connection_id"
+                        />
                       </div>
                     </div>
                   </td>
@@ -296,11 +289,9 @@
                           </svg>
                         </button>
                       </NuxtLink>
-                      <button class="btn btn-square btn-sm bg-neutral-50 text-neutral-50-content hover:bg-neutral-100 hover:text-neutral-50-content">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                      </button>
+                      <ConfirmDeleteModal
+                          :modal-id="'delete-connection-' + connection.connection_id"
+                      />
                     </div>
                   </td>
                 </tr>
@@ -357,9 +348,20 @@
 
   <div class="delete">
     <div class="tooltip tooltip-primary tooltip-left" data-tip="Удаление системы">
-        <button class="btn btn-xl btn-square bg-neutral-50 text-neutral-50-content shadow-md hover:bg-neutral-100 hover:text-neutral-50-content">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6L20 6M6 6l0 15M17 6l0 15M6 21L17 21M8 2L15 2" /></svg>
-        </button>
+      <label for="DeleteServer" class="btn btn-xl btn-square bg-neutral-50 text-neutral-50-content shadow-md hover:bg-neutral-100 hover:text-neutral-50-content">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6L20 6M6 6l0 15M17 6l0 15M6 21L17 21M8 2L15 2" /></svg>
+      </label>
+      <input type="checkbox" id="DeleteServer" class="modal-toggle" />
+      <div class="modal">
+        <div class="modal-box">
+          <h3 class="font-bold text-lg text-left">Подтверждение удаления</h3>
+          <p class="py-4 text-left">Вы уверены, что хотите удалить эту систему?</p>
+          <div class="modal-action">
+            <label for="DeleteServer" class="btn">Отмена</label>
+            <button class="btn btn-neutral" @click="$emit('confirm')">Удалить</button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -371,6 +373,7 @@ import { useRoute } from 'vue-router';
 import { useSystemStore } from '@/stores/SystemStore';
 import { useServerStore } from '@/stores/ServerStore';
 import { useSystemServerStore } from '@/stores/SystemServerStore';
+import ConfirmDeleteModal from '@/components/ConfirmDeleteModal.vue';
 
 const systemServerStore = useSystemServerStore();
 const serverStore = useServerStore();

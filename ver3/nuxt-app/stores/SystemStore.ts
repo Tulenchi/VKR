@@ -16,11 +16,6 @@ export const useSystemStore = defineStore('systemStore', {
         },
         getAllTypes: (state) => {
             const types = new Set<string>();
-            state.systems.forEach(system => {
-                if (system.systemtype_id) {
-                    types.add(system.systemtype_id.type);
-                }
-            });
             testSystemType.forEach(type => {
                 types.add(type.type);
             });

@@ -488,6 +488,7 @@ const initNetwork = () => {
       label: group.group_name,
       group: 'group',
       shape: 'ellipse',
+      level: 4,
       color: {
         background: '#6d798c',
         border: '#4b5361',
@@ -509,6 +510,7 @@ const initNetwork = () => {
       label: server.server_name,
       group: 'server',
       shape: 'box',
+      level: 2,
       color: {
         background: '#5d8cde',
         border: '#2c5aab',
@@ -538,6 +540,7 @@ const initNetwork = () => {
           label: server.cluster_id.cluster_name,
           group: 'cluster',
           shape: 'diamond',
+          level: 1,
           color: {
             background: '#9DADC9',
             border: '#4a515e',
@@ -566,6 +569,7 @@ const initNetwork = () => {
             label: system.system_name,
             group: 'system',
             shape: 'box',
+            level: 3,
             color: {
               background: '#BB8D54',
               border: '#61492c',
@@ -652,27 +656,34 @@ const initNetwork = () => {
       improvedLayout: true,
       randomSeed: 42,
       hierarchical: {
-        enabled: false // Иерархическое расположение
+        enabled: true, // Иерархическое расположение
+        direction: 'UD', // Направление сверху вниз (Up-Down)
+        sortMethod: 'directed', // Направление связей
+        nodeSpacing: 150, // Расстояние между узлами
+        levelSeparation: 300, // Расстояние между уровнями
       }
     },
     physics: {
-      enabled: true,
-      solver: 'forceAtlas2Based',
-      forceAtlas2Based: {
-        gravitationalConstant: -110,
-        centralGravity: 0.01,
-        springLength: 200, // Длина пружины
-        springConstant: 0.05,
-        damping: 0.3,
-        avoidOverlap: 1 // 0-1, где 1 - строгое избегание перекрытия
-      },
-      stabilization: {
-        enabled: true,
-        iterations: 2000,
-        updateInterval: 25
-      },
-      timestep: 0.5,
-      adaptiveTimestep: true
+      enabled:  false,
+      hierarchicalRepulsion: {
+        nodeDistance: 200 // Дистанция между узлами
+      }
+      // solver: 'forceAtlas2Based',
+      // forceAtlas2Based: {
+      //   gravitationalConstant: -110,
+      //   centralGravity: 0.01,
+      //   springLength: 200, // Длина пружины
+      //   springConstant: 0.05,
+      //   damping: 0.3,
+      //   avoidOverlap: 1 // 0-1, где 1 - строгое избегание перекрытия
+      // },
+      // stabilization: {
+      //   enabled: true,
+      //   iterations: 2000,
+      //   updateInterval: 25
+      // },
+      // timestep: 0.5,
+      // adaptiveTimestep: true
     },
     nodes: {
       font: {
