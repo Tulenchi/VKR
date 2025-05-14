@@ -6,6 +6,7 @@ export const useServerStore = defineStore('serverStore', {
     state: () => ({
         servers: [] as ServerUnit[],
         loading: false,
+        error: null as string | null,
         currentServer: null as ServerUnit | null,
         cache: new Map<string, ServerUnit>() // кеш для избежания повторных загрузок
     }),
@@ -37,10 +38,24 @@ export const useServerStore = defineStore('serverStore', {
 
             this.loading = true;
             try {
+                //await new Promise(resolve => setTimeout(resolve, 5000)); // Искусственная проверка загрузки
+                //throw new Error("Loading servers ERROR"); // Искусственная проверка ошибки
+
+                // API
+                // const { $axios } = useNuxtApp();
+                // const response = await $axios.get('/servers');
+                // this.servers = response.data;
+                // this.servers.forEach(server => {
+                //     this.cache.set(server.server_id, server);
+                // }); // заполняем кеш
+
+                // Test
                 this.servers = testServerUnits;
                 testServerUnits.forEach(server => {
                     this.cache.set(server.server_id, server);
                 }); // заполняем кеш
+            } catch (e: any) {
+                this.error = e.message || 'Ошибка при загрузке';
             } finally {
                 this.loading = false;
             }

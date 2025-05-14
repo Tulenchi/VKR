@@ -35,7 +35,17 @@
   -->
 
     <main class="container mx-auto px-4 py-8 max-w-3xl">
-      <div class="space-y-4">
+      <div v-if="store.loading" class="fixed inset-0 flex items-center justify-center bg-white z-50">
+        <div class="text-center">
+          <span class="loading loading-spinner text-[#D5DCE8] loading-xl"></span>
+        </div>
+      </div>
+      <div v-else-if="store.error" class="fixed inset-0 flex items-center justify-center">
+        <div class="text-center alert alert-error">
+          {{store.error}}
+        </div>
+      </div>
+      <div v-else class="space-y-4">
         <ServerCardMain
             v-for="server in store.servers"
             :key="server.server_id"

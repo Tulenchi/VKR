@@ -1,14 +1,9 @@
 <template>
   <div class="navbar bg-primary shadow-sm">
     <div class="navbar-start">
-      <button class="btn btn-ghost btn-secondary h-12 w-12 mr-1" @click="goBack">
-          <span class="text-primary-content">
-            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="19" y1="12" x2="5" y2="12"></line>
-              <polyline points="12 19 5 12 12 5"></polyline>
-            </svg>
-          </span>
-      </button>
+      <ConfirmCancelRedactModal
+          :modalId="'cancel-changes-modal'"
+      />
       <NuxtLink :to="{ name: 'index' }">
         <button class="btn btn-ghost btn-secondary h-12 w-12">
           <span class="text-primary-content">
@@ -24,13 +19,9 @@
     </div>
     <div class="navbar-end text-primary-content">
       <ThemeSwitcher />
-      <button class="btn btn-ghost btn-secondary h-12 w-12 ml-1" @click="goBack">
-          <span class="text-primary-content">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="30">
-              <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" fill="currentColor"/>
-            </svg>
-          </span>
-      </button>
+      <ConfirmChangeModal
+          :modalId="'changes-modal' + form.id"
+      />
     </div>
   </div>
 
@@ -75,21 +66,23 @@
     </div>
   </main>
 
-  <div class="delete">
-    <button class="btn btn-xl btn-square shadow-md bg-neutral-50 text-neutral-50-content hover:bg-neutral-100 hover:text-neutral-50-content" @click="showPopup">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6L20 6M6 6l0 15M17 6l0 15M6 21L17 21M8 2L15 2" /></svg>
-    </button>
-  </div>
+  <ConfirmBigDeleteModal
+      :modalBigId="'big-delete-ip-' + form.id"
+      customDataTip="Удаление IP-адреса"
+      customMessage="Вы точно хотите удалить этот IP-адрес?"
+  />
 
 </template>
 
 <script lang="ts" setup>
 import {ref, onMounted, computed} from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
 import { useServerStore } from '@/stores/ServerStore';
+import ConfirmBigDeleteModal from '@/components/ConfirmBigDeleteModal.vue';
+import ConfirmChangeModal from '@/components/ConfirmChangeModal.vue';
+import ConfirmCancelRedactModal from "~/components/ConfirmCancelRedactModal.vue";
 
 const route = useRoute();
-const router = useRouter();
 const serverStore = useServerStore();
 const loading = ref(false);
 const textarea = ref<HTMLTextAreaElement | null>(null);
@@ -100,10 +93,6 @@ const autoResizeTextarea = () => {
     textarea.value.style.height = `${textarea.value.scrollHeight}px`;
   }
 };
-
-onMounted(() => {
-  autoResizeTextarea();
-});
 
 const serverId = computed(() => Array.isArray(route.params.id) ? route.params.id[0] : route.params.id);
 const server = computed(() => serverStore.getServerById(serverId.value));
@@ -117,30 +106,39 @@ const form = ref({
   ip: '',
   version: '',
   type: '',
-  description: ''
+  description: '',
+  id: ''
 });
 
-watch(selectedIp, (newIp) => {
-  if (newIp) {
-    form.value.ip = newIp.ip;
-    form.value.version = newIp.version;
-    form.value.type = newIp.id_type.name;
-    form.value.description = newIp.description;
+// Сохранение данных в localStorage при изменении
+watch(form, (newValue) => {
+  localStorage.setItem('ipFormData', JSON.stringify(newValue))
+}, { deep: true })
+
+// Восстановление данных при загрузке
+onMounted(() => {
+  const savedData = localStorage.getItem('ipFormData')
+  if (savedData) {
+    form.value = JSON.parse(savedData)
   }
-}, { immediate: true });
 
-const goBack = () => {
-  router.go(-1)
-}
+  if (selectedIp.value) {
+    form.value = {
+      ...form.value,
+      ip: selectedIp.value.ip,
+      version: selectedIp.value.version,
+      type: selectedIp.value.id_type.name,
+      description: selectedIp.value.description,
+      id: rowId.value as string || ''
+    }
+  }
 
-const showPopup = () => {
-  const confirmation = confirm("Вы уверены, что хотите удалить данный объект?");
+  autoResizeTextarea()
+})
 
-  //if (confirmation) {
-  //  noteStore.deleteNote(note.id);
-  //  router.push('/');
-  //}
-}
+onBeforeUnmount(() => {
+  localStorage.removeItem('ipFormData')
+})
 
 useSeoMeta({
   title: 'Добавление IP-адреса',
@@ -149,11 +147,3 @@ useSeoMeta({
   ogDescription: 'Изменение параметров сервера/системы'
 })
 </script>
-
-<style lang="css" scoped>
-.delete{
-  position: fixed;
-  bottom: 20px;
-  right: 15px;
-}
-</style>

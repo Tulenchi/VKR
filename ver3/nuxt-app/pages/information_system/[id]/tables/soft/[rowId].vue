@@ -1,14 +1,9 @@
 <template>
   <div class="navbar bg-primary shadow-sm">
     <div class="navbar-start">
-      <button class="btn btn-ghost btn-secondary h-12 w-12 mr-1" @click="goBack">
-          <span class="text-primary-content">
-            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="19" y1="12" x2="5" y2="12"></line>
-              <polyline points="12 19 5 12 12 5"></polyline>
-            </svg>
-          </span>
-      </button>
+      <ConfirmCancelRedactModal
+          :modalId="'cancel-changes-modal'"
+      />
       <NuxtLink :to="{ name: 'index' }">
         <button class="btn btn-ghost btn-secondary h-12 w-12">
           <span class="text-primary-content">
@@ -24,13 +19,9 @@
     </div>
     <div class="navbar-end text-primary-content">
       <ThemeSwitcher />
-      <button class="btn btn-ghost btn-secondary h-12 w-12 ml-1" @click="goBack">
-          <span class="text-primary-content">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="30">
-              <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" fill="currentColor"/>
-            </svg>
-          </span>
-      </button>
+      <ConfirmChangeModal
+          :modalId="'changes-modal' + form.id"
+      />
     </div>
   </div>
 
@@ -68,21 +59,25 @@
     </div>
   </main>
 
-  <div class="delete">
-    <button class="btn btn-xl btn-square shadow-md bg-neutral-50 text-neutral-50-content hover:bg-neutral-100 hover:text-neutral-50-content" @click="showPopup">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6L20 6M6 6l0 15M17 6l0 15M6 21L17 21M8 2L15 2" /></svg>
-    </button>
-  </div>
+  <ConfirmBigDeleteModal
+      :modalBigId="'big-delete-soft-' + form.id"
+      customDataTip="Удаление софта"
+      customMessage="Вы точно хотите удалить этот софт?"
+  />
 
 </template>
 
 <script lang="ts" setup>
 import {ref, onMounted, computed} from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
+import ConfirmBigDeleteModal from '@/components/ConfirmBigDeleteModal.vue';
+import ConfirmCancelModal from "~/components/ConfirmCancelModal.vue";
+import ConfirmChangeModal from "~/components/ConfirmChangeModal.vue";
+import ConfirmCancelRedactModal from "~/components/ConfirmCancelRedactModal.vue";
 
 const route = useRoute();
-const router = useRouter();
 const textarea = ref<HTMLTextAreaElement | null>(null);
+const rowId = computed(() => route.params.rowId);
 
 const autoResizeTextarea = () => {
   if (textarea.value) {
@@ -94,7 +89,8 @@ const autoResizeTextarea = () => {
 const form = ref({
   name: '',
   version: '',
-  description: ''
+  description: '',
+  id: ''
 });
 
 onMounted(() => {
@@ -102,19 +98,11 @@ onMounted(() => {
     form.value = {
       name: route.query.name as string || '',
       version: route.query.version as string || '',
-      description: route.query.description as string || ''
+      description: route.query.description as string || '',
+      id: rowId.value as string || ''
     }
   }
 });
-
-const goBack = () => {
-  router.go(-1)
-}
-
-const showPopup = () => {
-  const confirmation = confirm("Вы уверены, что хотите удалить данный объект?");
-  // Логика удаления
-}
 
 useSeoMeta({
   title: 'Изменение софта',
@@ -123,11 +111,3 @@ useSeoMeta({
   ogDescription: 'Изменение параметров сервера/системы'
 })
 </script>
-
-<style lang="css" scoped>
-.delete{
-  position: fixed;
-  bottom: 20px;
-  right: 15px;
-}
-</style>
