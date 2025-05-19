@@ -46,14 +46,22 @@
         <div class="mb-2">
           <div class="flex items-center justify-between mb-2">
             <h3 class="text-xl font-semibold">Version</h3>
-            <input type="text" v-model="form.version" placeholder="Введите текст" class="input input-neutral input-base-100" />
+            <CustomSelect
+                v-model="form.version"
+                :options="['IpV4', 'IpV6']"
+                placeholder="Выберите версию"
+            />
           </div>
         </div>
 
         <div class="mb-2">
           <div class="flex items-center justify-between mb-3">
             <h3 class="text-xl font-semibold">Type</h3>
-            <input type="text" v-model="form.type" placeholder="Введите текст" class="input input-neutral input-base-100" />
+            <CustomSelect
+                v-model="form.type"
+                :options="['Внешний', 'Внутренний']"
+                placeholder="Выберите тип"
+            />
           </div>
         </div>
 
@@ -73,6 +81,7 @@
 import { ref } from 'vue';
 import ConfirmCancelModal from "~/components/ConfirmCancelModal.vue";
 import ConfirmAddModal from "~/components/ConfirmAddModal.vue";
+import CustomSelect from "~/components/CustomSelect.vue"
 
 const textarea = ref(null);
 
@@ -90,6 +99,10 @@ const form = ref({
   description: '',
   id: ''
 });
+
+const submitForm = () => {
+  // Логика отправки данных
+};
 
 useSeoMeta({
   title: 'Добавление IP-адреса',
