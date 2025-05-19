@@ -1,6 +1,5 @@
 import type {IpAddressType} from "~/models/IpAddressType";
 import type {NetworkPort} from "~/models/NetworkPort";
-import type {domain_ip} from "~/models/domain_ip";
 type cidr = string;
 type uuid = string;
 

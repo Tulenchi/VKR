@@ -1,4 +1,3 @@
-import type {htype_hMU} from "~/models/htype_hMU";
 type slug = string;
 type uuid = string;
 

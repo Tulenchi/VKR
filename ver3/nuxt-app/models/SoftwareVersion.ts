@@ -1,6 +1,4 @@
-import type {server_sversion} from "~/models/server_sversion";
 import type {Software} from "~/models/Software";
-import type {system_sversion} from "~/models/system_sversion";
 type uuid = string;
 
 export interface SoftwareVersion {

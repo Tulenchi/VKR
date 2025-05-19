@@ -1,4 +1,3 @@
-import type {port_protocol} from "~/models/port_protocol";
 type uuid = string;
 type int = number;
 

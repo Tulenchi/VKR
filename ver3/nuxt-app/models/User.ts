@@ -1,4 +1,3 @@
-import type {users_groups} from "~/models/users_groups";
 type uuid = string;
 
 export interface User {

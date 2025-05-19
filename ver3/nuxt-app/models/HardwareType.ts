@@ -1,4 +1,3 @@
-import type {htype_hMU} from "~/models/htype_hMU";
 import type {HardwareMeasurementUnit} from "~/models/HardwareMeasurementUnit";
 type slug = string;
 type uuid = string;

@@ -1,6 +1,4 @@
-import type {server_domain} from "~/models/server_domain";
 import type {DNSRecord} from "~/models/DNSRecord";
-import type {domain_ip} from "~/models/domain_ip";
 import type {IpAddress} from "~/models/IpAddress";
 type uuid = string;
 

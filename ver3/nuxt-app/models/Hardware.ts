@@ -1,5 +1,4 @@
 import type {HardwareType} from "~/models/HardwareType";
-import type {server_hardware} from "~/models/server_hardware";
 type double = number;
 type uuid = string;
 
