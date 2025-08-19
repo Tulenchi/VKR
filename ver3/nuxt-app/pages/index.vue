@@ -21,7 +21,7 @@
     </div>
   </div>
 
-  <!--<div class="flex justify-center px-4 py-7 ">
+  <div class="flex justify-center px-4 py-7 ">
       <label class="input input-neutral w-full max-w-xl">
         <svg class="h-4 w-4 opacity-70" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
           <g stroke-linejoin="round" stroke-linecap="round" stroke-width="2.5" fill="none" stroke="currentColor">
@@ -29,12 +29,12 @@
             <path d="m21 21-4.3-4.3"></path>
           </g>
         </svg>
-        <input type="search" class="grow" placeholder="Поиск серверов..." />
+        <input type="search" class="grow" placeholder="Поиск сервера" />
       </label>
   </div>
-  -->
 
-    <main class="container mx-auto px-4 py-8 max-w-3xl">
+
+    <main class="container mx-auto px-4 py-1 max-w-3xl">
       <div v-if="store.loading" class="fixed inset-0 flex items-center justify-center bg-white z-50">
         <div class="text-center">
           <span class="loading loading-spinner text-[#D5DCE8] loading-xl"></span>

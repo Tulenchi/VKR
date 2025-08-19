@@ -7,5 +7,5 @@ export interface Group {
     identifier: slug;
     group_name: string;
     description: string;
-    user_id: User[];
+    user_id: User[]; // foreign key
 }

@@ -34,6 +34,33 @@
     <div class="card bg-neutral text-neutral-content shadow-xl mb-3">
       <div class="card-body">
 
+        <!-- Название сервера -->
+        <div class="mb-0 ">
+          <div class="flex items-center justify-between mb-2">
+            <h3 class="text-xl font-semibold">Название</h3>
+            <!--<span class="w-auto px-5 py-2 truncate bg-base-100 text-base-content flex items-center justify-center rounded-sm font-semibold sm:min-w-60 md:min-w-80">{{ system.system_name }}</span>-->
+            <div class="join">
+              <div>
+                <label class="input input-neutral join-item sm:min-w-50 md:min-w-70 focus:outline-none border-none focus:border-none">
+                  <input
+                      v-model="editableServerName"
+                      placeholder="Название сервера"
+                      required
+                      class="focus:outline-none focus:ring-0 border-none focus:border-none"
+                  />
+                </label>
+              </div>
+              <button class="btn btn-square bg-neutral-50 text-neutral-50-content join-item hover:bg-neutral-100 hover:text-neutral-50-content">
+                <span class="text-neutral-50-content">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="22" height="22">
+                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" fill="currentColor"/>
+                </svg>
+              </span>
+              </button>
+            </div>
+          </div>
+        </div>
+
         <!-- Система -->
         <div class="mb-4">
           <h3 class="text-xl font-semibold mb-2">Системы</h3>
@@ -416,6 +443,8 @@ watch(serverId, (newId) => {
   serverStore.fetchServerById(newId);
 }, { immediate: true });
 
+const editableServerName = ref(server.value?.server_name || '');
+
 useSeoMeta({
   title: `Информация о сервере "${server.value.server_name}"`,
   ogTitle: `Информация о сервере "${server.value.server_name}"`,
@@ -424,3 +453,11 @@ useSeoMeta({
 })
 </script>
 
+<!--<style>
+::-webkit-scrollbar {
+  display: none;
+}
+html {
+  scrollbar-width: none;
+}
+</style>-->
